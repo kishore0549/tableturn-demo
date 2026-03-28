@@ -1,554 +1,657 @@
-
-
-
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="en-GB" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TableTurn — App Mockup</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>TableTurn — QR Code Table Ordering Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
+/* ── SKIP LINK (WCAG 2.4.1) ── */
+.skip-link {
+  position:absolute; top:-100px; left:16px; z-index:9999;
+  background:var(--lime); color:var(--navy);
+  padding:10px 18px; border-radius:8px;
+  font-family:'Inter',sans-serif; font-size:14px; font-weight:700;
+  text-decoration:none; transition:top 0.2s;
+}
+.skip-link:focus { top:16px; }
+
+/* ── DESIGN TOKENS ── */
 :root {
---lime:    #C8F04D;
---coral:   #FF5C4D;
---violet:  #7B5CF5;
---navy:    #0A0A14;
---cream:   #FAF8F2;
---card:    #13131F;
---muted:   #6B6B80;
---glass:   rgba(255,255,255,0.06);
---border:  rgba(255,255,255,0.08);
+  /* Brand accent — amber gold */
+  --accent:  #F59E0B;
+  --lime:    #F59E0B;   /* alias kept for compatibility */
+  --coral:   #EF4444;
+  --violet:  #8B5CF6;
+  --success: #10B981;
+
+  /* Phone UI — always dark */
+  --navy:         #0F172A;
+  --card:         #1E293B;
+  --glass:        rgba(255,255,255,0.05);
+  --phone-border: rgba(255,255,255,0.07);
+  --phone-muted:  #94A3B8;
+
+  /* Dark page theme */
+  --bg:           #070D1A;
+  --surface:      #0F172A;
+  --text:         #E2E8F0;
+  --muted:        #94A3B8;
+  --border:       rgba(255,255,255,0.08);
+  --note-bg:      #0F172A;
+  --note-text:    #94A3B8;
+  --note-heading: #E2E8F0;
+  --focus-ring:   #F59E0B;
+  --toggle-bg:    #1E293B;
+}
+
+/* ── LIGHT THEME — cool professional white ── */
+[data-theme="light"] {
+  --bg:           #F8FAFC;
+  --surface:      #FFFFFF;
+  --text:         #0F172A;
+  --muted:        #64748B;
+  --border:       rgba(0,0,0,0.08);
+  --note-bg:      #FFFFFF;
+  --note-text:    #64748B;
+  --note-heading: #0F172A;
+  --focus-ring:   #0F172A;
+  --toggle-bg:    #FFFFFF;
+}
+
+/* ── FOCUS STYLES — WCAG 2.4.7 / 2.4.11 ── */
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── REDUCED MOTION — WCAG 2.3.3 ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {
-background: #07070F;
-font-family: ‘DM Sans’, sans-serif;
-color: #fff;
-min-height: 100vh;
-overflow-x: hidden;
+  background: var(--bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
 }
 
-/* ── HERO SECTION ── */
+/* ── THEME TOGGLE ── */
+.theme-toggle {
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--toggle-bg); border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 20px;
+  transition: background 0.3s, border-color 0.3s, transform 0.15s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.theme-toggle:hover { transform: scale(1.1); }
+
+/* ── HERO ── */
 .hero {
-text-align: center;
-padding: 60px 20px 40px;
-position: relative;
-overflow: hidden;
+  text-align: center;
+  padding: 72px 20px 40px;
+  position: relative;
+  overflow: hidden;
 }
 .hero::before {
-content:’’;
-position:absolute; inset:0;
-background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(123,92,245,0.18) 0%, transparent 70%),
-radial-gradient(ellipse 60% 40% at 20% 80%, rgba(200,240,77,0.08) 0%, transparent 60%);
-pointer-events:none;
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139,92,246,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(245,158,11,0.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+[data-theme="light"] .hero::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139,92,246,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(245,158,11,0.12) 0%, transparent 60%);
 }
 .hero-tag {
-display:inline-flex; align-items:center; gap:8px;
-background: var(--glass); border: 1px solid var(--border);
-border-radius:100px; padding:6px 16px;
-font-size:12px; letter-spacing:0.08em; color: var(--lime);
-text-transform:uppercase; margin-bottom:24px;
-backdrop-filter: blur(12px);
+  display:inline-flex; align-items:center; gap:8px;
+  background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.25);
+  border-radius:100px; padding:6px 16px;
+  font-size:12px; letter-spacing:0.08em; color: var(--lime);
+  text-transform:uppercase; margin-bottom:24px;
+  backdrop-filter: blur(12px);
 }
-.hero-tag span { width:6px;height:6px;border-radius:50%;background:var(--lime);animation:pulse 2s infinite; }
+.hero-tag span { width:6px; height:6px; border-radius:50%; background:var(--lime); animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
 .hero h1 {
-font-family:‘Syne’,sans-serif; font-weight:800;
-font-size:clamp(32px,5vw,64px); line-height:1.05;
-letter-spacing:-0.03em; margin-bottom:16px;
+  font-family:'Space Grotesk',sans-serif; font-weight:800;
+  font-size:clamp(32px,5vw,64px); line-height:1.05;
+  letter-spacing:-0.03em; margin-bottom:16px;
+  color: var(--text);
 }
 .hero h1 em { font-style:normal; color:var(--lime); }
 .hero p { color:var(--muted); font-size:16px; max-width:480px; margin:0 auto 40px; line-height:1.6; }
 
-/* Screen indicator tabs */
+/* ── SCREEN TABS ── */
 .screen-tabs {
-display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
-padding:0 20px 40px;
+  display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+  padding:0 20px 40px;
 }
 .tab {
-padding:8px 18px; border-radius:100px; font-size:13px; font-weight:500;
-cursor:pointer; transition:all 0.2s; border:1px solid var(--border);
-background:transparent; color:var(--muted);
+  padding:9px 18px; border-radius:100px; font-size:13px; font-weight:500;
+  cursor:pointer; transition:all 0.2s;
+  border:1.5px solid var(--border);
+  background:transparent; color:var(--muted);
+  font-family:'Inter',sans-serif;
 }
-.tab.active, .tab:hover { background:var(--lime); color:var(--navy); border-color:var(--lime); }
+.tab:hover { color:var(--text); border-color:var(--lime); }
+.tab.active, .tab[aria-selected="true"] { background:var(--lime); color:var(--navy); border-color:var(--lime); font-weight:600; }
+
+/* ── FLOW SECTION ── */
+.flow-section {
+  max-width:900px; margin:0 auto 60px; padding:0 24px;
+  text-align:center;
+}
+.flow-steps { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; }
+.flow-step {
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  width:120px;
+}
+.flow-num {
+  width:44px; height:44px; border-radius:50%;
+  border:2px solid var(--lime);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:800; color:var(--lime);
+  transition: background 0.25s, color 0.25s;
+}
+.flow-step.active .flow-num { background:var(--lime); color:var(--navy); }
+.flow-step.active .flow-step-label { color:var(--text); font-weight:600; }
+.flow-step-label { font-size:11px; color:var(--muted); text-align:center; line-height:1.4; transition:color 0.25s; }
+.flow-arrow { color:var(--border); font-size:20px; margin-bottom:22px; }
 
 /* ── PHONE FRAME ── */
 .demo-stage {
-display:flex; justify-content:center; align-items:flex-start;
-gap:40px; padding:0 20px 80px; flex-wrap:wrap;
+  display:flex; justify-content:center; align-items:flex-start;
+  gap:40px; padding:0 20px 80px; flex-wrap:wrap;
 }
 .phone-wrap { position:relative; flex-shrink:0; }
 .phone-label {
-text-align:center; margin-bottom:16px;
-font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
-color:var(--muted);
+  text-align:center; margin-bottom:16px;
+  font-size:11px; letter-spacing:0.10em; text-transform:uppercase;
+  color:var(--muted); min-height:16px;
 }
 .phone {
-width:320px; height:640px;
-background:var(--navy);
-border-radius:42px;
-border:1.5px solid rgba(255,255,255,0.12);
-overflow:hidden; position:relative;
-box-shadow:
-0 0 0 6px rgba(255,255,255,0.03),
-0 40px 80px rgba(0,0,0,0.6),
-0 0 120px rgba(123,92,245,0.12);
+  width:320px; height:640px;
+  background:var(--navy);
+  border-radius:42px;
+  border:1.5px solid rgba(255,255,255,0.12);
+  overflow:hidden; position:relative;
+  box-shadow:
+    0 0 0 6px rgba(255,255,255,0.03),
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 120px rgba(139,92,246,0.12);
+}
+[data-theme="light"] .phone {
+  border-color: rgba(0,0,0,0.15);
+  box-shadow: 0 0 0 6px rgba(0,0,0,0.03), 0 40px 80px rgba(0,0,0,0.18), 0 0 80px rgba(139,92,246,0.06);
 }
 .phone::before {
-content:’’; position:absolute; top:0; left:50%; transform:translateX(-50%);
-width:90px; height:28px; background:#07070F;
-border-radius:0 0 18px 18px; z-index:100;
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:90px; height:28px; background:#070D1A;
+  border-radius:0 0 18px 18px; z-index:100;
 }
 
 /* ── SCREEN BASE ── */
 .screen {
-position:absolute; inset:0;
-display:none; flex-direction:column;
-overflow:hidden;
+  position:absolute; inset:0;
+  display:none; flex-direction:column;
+  overflow:hidden;
 }
 .screen.active { display:flex; animation: screenIn 0.35s cubic-bezier(0.34,1.56,0.64,1); }
 @keyframes screenIn {
-from { opacity:0; transform:translateY(16px) scale(0.98); }
-to   { opacity:1; transform:translateY(0) scale(1); }
+  from { opacity:0; transform:translateY(14px) scale(0.98); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
 }
 
-/* ── SCREEN 1: MENU LANDING ── */
+/* ── SCREEN 1: MENU ── */
 #s1 { background:var(--navy); }
-.s1-hero {
-position:relative; height:220px; flex-shrink:0; overflow:hidden;
-}
-.s1-hero-img {
-width:100%; height:100%; object-fit:cover;
-background: linear-gradient(135deg, #1a0a2e 0%, #2d1b69 50%, #1a2a1a 100%);
-}
+.s1-hero { position:relative; height:220px; flex-shrink:0; overflow:hidden; }
 .s1-hero-img-inner {
-width:100%; height:100%;
-background:
-radial-gradient(circle at 30% 40%, rgba(200,240,77,0.3) 0%, transparent 50%),
-radial-gradient(circle at 80% 70%, rgba(255,92,77,0.25) 0%, transparent 45%),
-radial-gradient(circle at 60% 20%, rgba(123,92,245,0.3) 0%, transparent 40%);
-display:flex; align-items:center; justify-content:center; font-size:80px;
+  width:100%; height:100%;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(245,158,11,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(239,68,68,0.25) 0%, transparent 45%),
+    radial-gradient(circle at 60% 20%, rgba(139,92,246,0.3) 0%, transparent 40%);
+  display:flex; align-items:center; justify-content:center; font-size:80px;
 }
 .s1-hero-overlay {
-position:absolute; inset:0;
-background:linear-gradient(to bottom, rgba(10,10,20,0) 30%, rgba(10,10,20,1) 100%);
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom, rgba(15,23,42,0) 30%, rgba(15,23,42,1) 100%);
 }
 .s1-table-badge {
-position:absolute; top:40px; right:16px;
-background:rgba(200,240,77,0.15); border:1px solid var(--lime);
-border-radius:20px; padding:6px 14px;
-font-size:12px; color:var(--lime); font-weight:600;
-backdrop-filter:blur(12px);
+  position:absolute; top:40px; right:16px;
+  background:rgba(245,158,11,0.15); border:1px solid var(--lime);
+  border-radius:20px; padding:6px 14px;
+  font-size:12px; color:var(--lime); font-weight:600;
+  backdrop-filter:blur(12px);
 }
-.s1-restaurant-name {
-position:absolute; bottom:16px; left:16px; right:16px;
-}
+.s1-restaurant-name { position:absolute; bottom:16px; left:16px; right:16px; }
 .s1-restaurant-name h2 {
-font-family:‘Syne’,sans-serif; font-weight:800; font-size:22px; line-height:1.1;
-letter-spacing:-0.02em;
+  font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:22px; line-height:1.1;
+  letter-spacing:-0.02em; color:#fff;
 }
 .s1-restaurant-name p { font-size:12px; color:rgba(255,255,255,0.5); margin-top:3px; }
 
 .s1-filters {
-display:flex; gap:8px; padding:14px 16px;
-overflow-x:auto; flex-shrink:0;
-scrollbar-width:none;
+  display:flex; gap:8px; padding:14px 16px;
+  overflow-x:auto; flex-shrink:0; scrollbar-width:none;
 }
 .s1-filter {
-flex-shrink:0; padding:7px 14px; border-radius:100px;
-font-size:12px; font-weight:500; cursor:pointer;
-border:1px solid var(--border); color:var(--muted);
-white-space:nowrap; transition:all 0.2s;
+  flex-shrink:0; padding:7px 14px; border-radius:100px;
+  font-size:12px; font-weight:500; cursor:pointer;
+  border:1px solid rgba(255,255,255,0.08); color:#94A3B8;
+  white-space:nowrap; transition:all 0.2s;
+  background:transparent; font-family:'Inter',sans-serif;
 }
-.s1-filter.on { background:var(--lime); color:var(--navy); border-color:var(--lime); font-weight:600; }
+.s1-filter.on, .s1-filter:hover { background:var(--lime); color:var(--navy); border-color:var(--lime); font-weight:600; }
 
 .s1-section-title {
-padding:0 16px 10px;
-font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
-color:var(--muted); font-weight:600;
+  padding:0 16px 10px;
+  font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:#94A3B8; font-weight:600;
 }
 .s1-items {
-flex:1; overflow-y:auto; padding:0 16px 80px;
-scrollbar-width:none; display:flex; flex-direction:column; gap:10px;
+  flex:1; overflow-y:auto; padding:0 16px 80px;
+  scrollbar-width:none; display:flex; flex-direction:column; gap:10px;
+  list-style:none;
 }
 .item-card {
-background:var(--card); border:1px solid var(--border);
-border-radius:18px; padding:12px; display:flex; gap:12px;
-cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden;
+  background:#1E293B; border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:18px; padding:14px 12px 14px 14px;
+  display:flex; gap:14px; align-items:flex-start;
+  cursor:pointer; transition:border-color 0.2s, transform 0.2s;
+  position:relative; overflow:hidden; min-height:100px;
 }
 .item-card::after {
-content:’’; position:absolute; inset:0;
-background:linear-gradient(135deg, rgba(200,240,77,0.03), transparent);
-opacity:0; transition:opacity 0.2s;
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(245,158,11,0.04), transparent);
+  opacity:0; transition:opacity 0.2s; pointer-events:none;
 }
-.item-card:hover::after { opacity:1; }
-.item-card:hover { border-color:rgba(200,240,77,0.3); transform:translateY(-1px); }
-.item-img {
-width:72px; height:72px; border-radius:14px; flex-shrink:0;
-display:flex; align-items:center; justify-content:center;
-font-size:32px; overflow:hidden;
-}
-.item-img.curry  { background:linear-gradient(135deg,#2a1a0a,#4a2a0a); }
-.item-img.bread  { background:linear-gradient(135deg,#1a1a0a,#3a3a0a); }
-.item-img.drink  { background:linear-gradient(135deg,#0a1a2a,#0a2a3a); }
-.item-img.biryani{ background:linear-gradient(135deg,#1a0a0a,#3a1a0a); }
-.item-info { flex:1; min-width:0; }
-.item-name { font-family:‘Syne’,sans-serif; font-size:14px; font-weight:700; margin-bottom:3px; }
-.item-desc { font-size:11px; color:var(--muted); line-height:1.4; margin-bottom:6px; }
-.item-meta { display:flex; align-items:center; gap:6px; }
-.item-price { font-size:15px; font-weight:700; color:var(--lime); }
-.item-rating { font-size:10px; color:var(--muted); }
-.item-tags { display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; }
-.tag {
-font-size:9px; padding:2px 7px; border-radius:100px;
-font-weight:600; letter-spacing:0.04em;
-}
-.tag.veg  { background:rgba(52,211,153,0.15); color:#34D399; border:1px solid rgba(52,211,153,0.2); }
-.tag.spice{ background:rgba(255,92,77,0.15); color:#FF5C4D; border:1px solid rgba(255,92,77,0.2); }
-.tag.chef { background:rgba(200,240,77,0.15); color:var(--lime); border:1px solid rgba(200,240,77,0.2); }
-.item-add {
-width:30px; height:30px; border-radius:50%;
-background:var(--lime); border:none; color:var(--navy);
-font-size:18px; font-weight:700; cursor:pointer;
-display:flex; align-items:center; justify-content:center;
-align-self:center; flex-shrink:0; transition:transform 0.15s;
-}
-.item-add:hover { transform:scale(1.1); }
+.item-card:hover::after, .item-card:focus-within::after { opacity:1; }
+.item-card:hover, .item-card:focus-within { border-color:rgba(245,158,11,0.35); transform:translateY(-1px); }
+.item-card.hidden { display:none; }
 
-/* Cart bar */
-.cart-bar {
-position:absolute; bottom:16px; left:16px; right:16px;
-background:var(--lime); border-radius:18px; padding:14px 16px;
-display:flex; align-items:center; justify-content:space-between;
-cursor:pointer; box-shadow:0 8px 32px rgba(200,240,77,0.3);
-transition:transform 0.15s;
+.item-img {
+  width:80px; height:80px; border-radius:14px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:38px;
+  box-shadow:inset 0 -4px 12px rgba(0,0,0,0.3);
 }
-.cart-bar:hover { transform:scale(1.02); }
+.item-img.curry  { background:linear-gradient(145deg,#3a1f08,#5c3010); }
+.item-img.bread  { background:linear-gradient(145deg,#2a2208,#4a3c10); }
+.item-img.drink  { background:linear-gradient(145deg,#0a2030,#0a3545); }
+.item-img.biryani{ background:linear-gradient(145deg,#2a0f0f,#4a1c10); }
+
+.item-info {
+  flex:1; min-width:0;
+  display:flex; flex-direction:column; gap:4px;
+}
+.item-name  { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.item-desc  { font-size:11px; color:#94A3B8; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; line-clamp:2; overflow:hidden; }
+.item-tags  { display:flex; gap:4px; flex-wrap:wrap; }
+.item-meta  { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+.item-price { font-size:14px; font-weight:700; color:var(--lime); }
+.item-rating{ font-size:10px; color:#94A3B8; }
+
+.tag { font-size:9px; padding:2px 7px; border-radius:100px; font-weight:600; letter-spacing:0.04em; white-space:nowrap; }
+.tag.veg   { background:rgba(52,211,153,0.15); color:#34D399; border:1px solid rgba(52,211,153,0.2); }
+.tag.spice { background:rgba(239,68,68,0.15);  color:#F87171; border:1px solid rgba(239,68,68,0.2); }
+.tag.chef  { background:rgba(245,158,11,0.15); color:var(--lime); border:1px solid rgba(245,158,11,0.2); }
+
+.item-add {
+  width:34px; height:34px; border-radius:50%;
+  background:var(--lime); border:none; color:var(--navy);
+  font-size:20px; font-weight:700; cursor:pointer; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; align-self:flex-end; margin-top:auto;
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+.item-add:hover { transform:scale(1.12); box-shadow:0 4px 14px rgba(245,158,11,0.45); }
+
+.cart-bar {
+  position:absolute; bottom:16px; left:16px; right:16px;
+  background:var(--lime); border-radius:18px; padding:14px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  cursor:pointer; border:none; font-family:'Inter',sans-serif;
+  box-shadow:0 8px 32px rgba(245,158,11,0.3);
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+.cart-bar:hover { transform:scale(1.02); box-shadow:0 12px 40px rgba(245,158,11,0.4); }
 .cart-bar-left { display:flex; align-items:center; gap:10px; }
-.cart-count { background:var(--navy); color:var(--lime); width:24px; height:24px; border-radius:8px; display:flex;align-items:center;justify-content:center; font-size:12px; font-weight:700; }
-.cart-bar-text { font-family:‘Syne’,sans-serif; font-size:14px; font-weight:800; color:var(--navy); }
-.cart-bar-price { font-family:‘Syne’,sans-serif; font-size:16px; font-weight:800; color:var(--navy); }
+.cart-count { background:var(--navy); color:var(--lime); width:24px; height:24px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; }
+.cart-bar-text  { font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:800; color:var(--navy); }
+.cart-bar-price { font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:800; color:var(--navy); }
 
 /* ── SCREEN 2: ITEM DETAIL ── */
 #s2 { background:var(--navy); }
 .s2-img {
-height:220px; flex-shrink:0;
-display:flex; align-items:center; justify-content:center;
-font-size:80px; position:relative; overflow:hidden;
-background:linear-gradient(135deg,#2a1a0a,#4a2a0a);
+  height:220px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:80px; position:relative; overflow:hidden;
+  background:linear-gradient(135deg,#2a1a0a,#4a2a0a);
 }
+.s2-img img { width:100%; height:100%; object-fit:cover; display:block; }
 .s2-img-glow {
-position:absolute; inset:0;
-background:radial-gradient(circle at 50% 50%, rgba(255,140,50,0.3), transparent 70%);
+  position:absolute; inset:0;
+  background:radial-gradient(circle at 50% 50%, rgba(255,140,50,0.3), transparent 70%);
 }
-.s2-back {
-position:absolute; top:44px; left:16px;
-width:36px; height:36px; border-radius:50%;
-background:rgba(10,10,20,0.7); border:1px solid var(--border);
-display:flex; align-items:center; justify-content:center;
-cursor:pointer; backdrop-filter:blur(12px); font-size:16px; z-index:10;
+.item-img img { width:100%; height:100%; object-fit:cover; border-radius:14px; display:block; }
+.s2-back, .s2-fav {
+  position:absolute; top:44px; z-index:10;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(15,23,42,0.75); border:1px solid rgba(255,255,255,0.12);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; backdrop-filter:blur(12px); font-size:16px;
+  transition:background 0.2s; color:#fff;
 }
-.s2-fav {
-position:absolute; top:44px; right:16px;
-width:36px; height:36px; border-radius:50%;
-background:rgba(10,10,20,0.7); border:1px solid var(--border);
-display:flex; align-items:center; justify-content:center;
-cursor:pointer; backdrop-filter:blur(12px); font-size:16px; z-index:10;
-}
+.s2-back { left:16px; }
+.s2-fav  { right:16px; }
+.s2-back:hover, .s2-fav:hover { background:rgba(15,23,42,0.95); }
+
 .s2-content { flex:1; overflow-y:auto; padding:20px 16px 100px; scrollbar-width:none; }
 .s2-chef-badge {
-display:inline-flex; align-items:center; gap:6px;
-background:rgba(200,240,77,0.12); border:1px solid rgba(200,240,77,0.3);
-border-radius:100px; padding:5px 12px;
-font-size:11px; color:var(--lime); font-weight:600;
-margin-bottom:12px;
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.3);
+  border-radius:100px; padding:5px 12px;
+  font-size:11px; color:var(--lime); font-weight:600; margin-bottom:12px;
 }
-.s2-name {
-font-family:‘Syne’,sans-serif; font-size:24px; font-weight:800;
-letter-spacing:-0.02em; margin-bottom:6px; line-height:1.1;
-}
+.s2-name { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:800; letter-spacing:-0.02em; margin-bottom:6px; line-height:1.1; color:#fff; }
 .s2-meta { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
-.s2-price { font-size:22px; font-weight:700; color:var(--lime); font-family:‘Syne’,sans-serif; }
-.s2-stars { font-size:12px; color:var(--muted); }
-.s2-desc { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.6; margin-bottom:18px; }
+.s2-price { font-size:22px; font-weight:700; color:var(--lime); font-family:'Space Grotesk',sans-serif; }
+.s2-stars { font-size:12px; color:#94A3B8; }
+.s2-desc { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:18px; }
 .s2-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
-.s2-section { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:10px; }
-.s2-spice {
-display:flex; gap:8px;
-}
+.s2-section { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#94A3B8; margin-bottom:10px; }
+
+.s2-spice { display:flex; gap:8px; }
 .spice-btn {
-flex:1; padding:10px 6px; border-radius:12px;
-border:1px solid var(--border); background:var(--card);
-text-align:center; cursor:pointer; transition:all 0.2s;
-font-size:18px; display:flex; flex-direction:column; align-items:center; gap:3px;
+  flex:1; padding:10px 6px; border-radius:12px;
+  border:1.5px solid rgba(255,255,255,0.08); background:#1E293B;
+  text-align:center; cursor:pointer; transition:all 0.2s;
+  font-size:18px; display:flex; flex-direction:column; align-items:center; gap:3px;
+  font-family:'Inter',sans-serif; color:#fff;
 }
-.spice-btn span { font-size:10px; color:var(--muted); font-weight:500; }
-.spice-btn.active { border-color:var(--coral); background:rgba(255,92,77,0.1); }
+.spice-btn span { font-size:10px; color:#94A3B8; font-weight:500; }
+.spice-btn .chilli-row { font-size:13px; letter-spacing:-1px; line-height:1.3; }
+.spice-btn.active, .spice-btn[aria-checked="true"] { border-color:var(--coral); background:rgba(239,68,68,0.12); }
+.spice-btn.active span, .spice-btn[aria-checked="true"] span { color:#FCA5A5; }
+.spice-btn:hover { border-color:rgba(239,68,68,0.5); }
+
 .s2-allergens {
-background:var(--card); border:1px solid var(--border); border-radius:14px;
-padding:12px; margin-top:14px; font-size:11px; color:var(--muted); line-height:1.5;
+  background:#1E293B; border:1px solid rgba(255,255,255,0.08); border-radius:14px;
+  padding:12px; margin-top:14px; font-size:11px; color:#94A3B8; line-height:1.6;
 }
 .s2-cta {
-position:absolute; bottom:16px; left:16px; right:16px;
-display:flex; gap:10px; align-items:center;
+  position:absolute; bottom:16px; left:16px; right:16px;
+  display:flex; gap:10px; align-items:center;
 }
 .s2-qty {
-display:flex; align-items:center; gap:10px;
-background:var(--card); border:1px solid var(--border); border-radius:14px; padding:10px 14px;
+  display:flex; align-items:center; gap:10px;
+  background:#1E293B; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:10px 14px;
 }
-.qty-btn { background:none; border:none; color:#fff; font-size:20px; cursor:pointer; font-weight:300; }
-.qty-num { font-family:‘Syne’,sans-serif; font-size:16px; font-weight:700; min-width:20px; text-align:center; }
+.qty-btn {
+  background:none; border:none; color:#fff; font-size:22px; cursor:pointer; font-weight:300;
+  width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; transition:background 0.15s; line-height:1;
+}
+.qty-btn:hover { background:rgba(255,255,255,0.1); }
+.qty-num { font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; min-width:22px; text-align:center; color:#fff; }
 .s2-add-btn {
-flex:1; background:var(--lime); border:none; border-radius:14px; padding:14px;
-font-family:‘Syne’,sans-serif; font-size:15px; font-weight:800; color:var(--navy);
-cursor:pointer; transition:transform 0.15s;
+  flex:1; background:var(--lime); border:none; border-radius:14px; padding:14px;
+  font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:800; color:var(--navy);
+  cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;
 }
-.s2-add-btn:hover { transform:scale(1.02); }
+.s2-add-btn:hover { transform:scale(1.02); box-shadow:0 8px 24px rgba(245,158,11,0.35); }
 
 /* ── SCREEN 3: CART + UPSELL ── */
 #s3 { background:var(--navy); }
 .s3-header { padding:44px 16px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
-.s3-title { font-family:‘Syne’,sans-serif; font-size:22px; font-weight:800; }
-.s3-edit { font-size:13px; color:var(--lime); cursor:pointer; }
-.s3-items { padding:0 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.s3-title { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:800; color:#fff; }
+.s3-edit { font-size:13px; color:var(--lime); cursor:pointer; background:none; border:none; font-family:'Inter',sans-serif; font-weight:600; padding:4px 0; }
+.s3-edit:hover { text-decoration:underline; }
+
+.s3-items { padding:0 16px; display:flex; flex-direction:column; gap:8px; flex-shrink:0; list-style:none; }
 .cart-item {
-background:var(--card); border:1px solid var(--border); border-radius:16px;
-padding:12px; display:flex; align-items:center; gap:10px;
+  background:#1E293B; border:1px solid rgba(255,255,255,0.08); border-radius:16px;
+  padding:12px; display:flex; align-items:center; gap:10px;
 }
 .cart-item-emoji { font-size:28px; width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); flex-shrink:0; }
 .cart-item-info { flex:1; }
-.cart-item-name { font-size:14px; font-weight:600; margin-bottom:2px; }
-.cart-item-sub { font-size:11px; color:var(--muted); }
-.cart-item-price { font-family:‘Syne’,sans-serif; font-size:15px; font-weight:700; color:var(--lime); }
+.cart-item-name { font-size:14px; font-weight:600; color:#fff; margin-bottom:2px; }
+.cart-item-sub  { font-size:11px; color:#94A3B8; }
+.cart-item-price { font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; color:var(--lime); }
 
-/* UPSELL CARD — THE HERO MOMENT */
 .upsell-card {
-margin:12px 16px;
-background: linear-gradient(135deg, rgba(123,92,245,0.15), rgba(200,240,77,0.05));
-border:1px solid rgba(123,92,245,0.4);
-border-radius:20px; padding:14px; flex-shrink:0;
-position:relative; overflow:hidden;
+  margin:12px 16px;
+  background:linear-gradient(135deg, rgba(139,92,246,0.15), rgba(245,158,11,0.05));
+  border:1.5px solid rgba(139,92,246,0.4);
+  border-radius:20px; padding:14px; flex-shrink:0; position:relative; overflow:hidden;
 }
 .upsell-card::before {
-content:’’;
-position:absolute; top:-30px; right:-30px;
-width:100px; height:100px; border-radius:50%;
-background:rgba(123,92,245,0.15);
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:100px; height:100px; border-radius:50%; background:rgba(139,92,246,0.15); pointer-events:none;
 }
 .upsell-badge {
-display:inline-flex; align-items:center; gap:5px;
-background:rgba(123,92,245,0.2); border:1px solid rgba(123,92,245,0.4);
-border-radius:100px; padding:3px 10px;
-font-size:9px; color:#A78BFA; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;
-margin-bottom:10px;
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(139,92,246,0.2); border:1px solid rgba(139,92,246,0.4);
+  border-radius:100px; padding:3px 10px;
+  font-size:9px; color:#A78BFA; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;
 }
-.upsell-row { display:flex; align-items:center; gap:12px; }
+.upsell-row   { display:flex; align-items:center; gap:12px; }
 .upsell-emoji { font-size:36px; }
-.upsell-info { flex:1; }
-.upsell-text { font-size:11px; color:rgba(255,255,255,0.5); margin-bottom:3px; line-height:1.4; }
-.upsell-name { font-family:‘Syne’,sans-serif; font-size:15px; font-weight:800; margin-bottom:2px; }
+.upsell-info  { flex:1; }
+.upsell-text  { font-size:11px; color:rgba(255,255,255,0.5); margin-bottom:3px; line-height:1.4; }
+.upsell-name  { font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:800; margin-bottom:2px; color:#fff; }
 .upsell-price { font-size:13px; color:var(--lime); font-weight:600; }
 .upsell-add {
-background:var(--violet); border:none; border-radius:12px;
-padding:10px 14px; color:#fff; font-family:‘Syne’,sans-serif;
-font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s;
-flex-shrink:0;
+  background:var(--violet); border:none; border-radius:12px;
+  padding:10px 14px; color:#fff; font-family:'Space Grotesk',sans-serif;
+  font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; flex-shrink:0;
 }
 .upsell-add:hover { background:#6d4ee0; transform:scale(1.05); }
 
 .s3-promo {
-margin:0 16px; display:flex; align-items:center; gap:10px;
-background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px;
-flex-shrink:0;
+  margin:12px 16px 0; display:flex; align-items:center; gap:10px;
+  background:#1E293B; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px; flex-shrink:0;
 }
-.promo-icon { font-size:18px; }
-.promo-text { flex:1; font-size:12px; color:var(--muted); }
-.promo-input { background:none; border:none; color:#fff; font-size:13px; font-weight:500; outline:none; width:100%; margin-top:2px; }
+.promo-icon  { font-size:18px; }
+.promo-text  { flex:1; }
+.promo-label { font-size:12px; font-weight:600; color:#fff; margin-bottom:3px; display:block; }
+.promo-input { background:none; border:none; color:#fff; font-size:13px; font-weight:500; outline:none; width:100%; margin-top:2px; font-family:'Inter',sans-serif; }
+.promo-input::placeholder { color:#94A3B8; }
 
-.s3-summary {
-margin:12px 16px 0; background:var(--card); border:1px solid var(--border);
-border-radius:16px; padding:14px; flex-shrink:0;
-}
+.s3-summary { margin:12px 16px 0; background:#1E293B; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:14px; flex-shrink:0; }
 .summary-row { display:flex; justify-content:space-between; align-items:center; }
 .summary-row + .summary-row { margin-top:8px; }
-.summary-label { font-size:12px; color:var(--muted); }
-.summary-val { font-size:13px; font-weight:600; }
-.summary-divider { height:1px; background:var(--border); margin:12px 0; }
+.summary-label { font-size:12px; color:#94A3B8; }
+.summary-val   { font-size:13px; font-weight:600; color:#fff; }
+.summary-divider { height:1px; background:rgba(255,255,255,0.08); margin:12px 0; }
 .summary-total .summary-label { font-size:14px; font-weight:700; color:#fff; }
-.summary-total .summary-val { font-size:18px; font-weight:800; color:var(--lime); font-family:‘Syne’,sans-serif; }
+.summary-total .summary-val   { font-size:18px; font-weight:800; color:var(--lime); font-family:'Space Grotesk',sans-serif; }
 
 .s3-pay-btn {
-margin:12px 16px 20px; width:calc(100% - 32px);
-background:var(--lime); border:none; border-radius:18px; padding:16px;
-font-family:‘Syne’,sans-serif; font-size:16px; font-weight:800; color:var(--navy);
-cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
-transition:transform 0.15s; box-shadow:0 8px 32px rgba(200,240,77,0.25);
+  margin:12px 16px 20px; width:calc(100% - 32px);
+  background:var(--lime); border:none; border-radius:18px; padding:16px;
+  font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:800; color:var(--navy);
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:transform 0.15s, box-shadow 0.15s; box-shadow:0 8px 32px rgba(245,158,11,0.25);
 }
-.s3-pay-btn:hover { transform:scale(1.02); }
+.s3-pay-btn:hover { transform:scale(1.02); box-shadow:0 12px 40px rgba(245,158,11,0.38); }
 .pay-icon { font-size:20px; }
 
 /* ── SCREEN 4: PAYMENT ── */
 #s4 { background:var(--navy); }
 .s4-header { padding:44px 16px 20px; flex-shrink:0; }
-.s4-back { font-size:22px; cursor:pointer; margin-bottom:16px; display:block; }
-.s4-title { font-family:‘Syne’,sans-serif; font-size:24px; font-weight:800; letter-spacing:-0.02em; }
-.s4-subtitle { font-size:13px; color:var(--muted); margin-top:4px; }
-.s4-total-card {
-margin:0 16px 16px; border-radius:20px; padding:20px;
-background:linear-gradient(135deg,rgba(200,240,77,0.12),rgba(200,240,77,0.04));
-border:1px solid rgba(200,240,77,0.2);
-display:flex; justify-content:space-between; align-items:center; flex-shrink:0;
+.s4-back {
+  font-size:22px; cursor:pointer; margin-bottom:16px; display:block;
+  background:none; border:none; color:#fff; text-align:left; padding:0; line-height:1;
+  width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05);
+  transition:background 0.2s;
 }
-.s4-total-label { font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:4px; }
-.s4-total-amount { font-family:‘Syne’,sans-serif; font-size:32px; font-weight:800; color:var(--lime); }
-.s4-total-icon { font-size:40px; }
+.s4-back:hover { background:rgba(255,255,255,0.12); }
+.s4-title    { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:800; letter-spacing:-0.02em; color:#fff; }
+.s4-subtitle { font-size:13px; color:#94A3B8; margin-top:4px; }
+
+.s4-total-card {
+  margin:0 16px 16px; border-radius:20px; padding:20px;
+  background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.04));
+  border:1px solid rgba(245,158,11,0.2);
+  display:flex; justify-content:space-between; align-items:center; flex-shrink:0;
+}
+.s4-total-label  { font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:4px; }
+.s4-total-amount { font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:800; color:var(--lime); }
+.s4-total-icon   { font-size:40px; }
+
 .s4-methods { padding:0 16px; flex-shrink:0; }
-.s4-methods-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:12px; }
+.s4-methods-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#94A3B8; margin-bottom:12px; }
 .method-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
 .method-card {
-background:var(--card); border:1.5px solid var(--border); border-radius:16px;
-padding:14px 12px; cursor:pointer; transition:all 0.2s; text-align:center;
+  background:#1E293B; border:1.5px solid rgba(255,255,255,0.08); border-radius:16px;
+  padding:14px 12px; cursor:pointer; transition:all 0.2s; text-align:center; font-family:'Inter',sans-serif;
 }
-.method-card.active { border-color:var(--lime); background:rgba(200,240,77,0.06); }
-.method-card:hover { border-color:rgba(200,240,77,0.4); }
+.method-card.active, .method-card[aria-checked="true"] { border-color:var(--lime); background:rgba(245,158,11,0.07); }
+.method-card:hover { border-color:rgba(245,158,11,0.4); }
 .method-icon { font-size:24px; margin-bottom:6px; }
-.method-name { font-size:12px; font-weight:600; }
-.method-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+.method-name { font-size:12px; font-weight:600; color:#fff; }
+.method-sub  { font-size:10px; color:#94A3B8; margin-top:2px; }
+
 .s4-card-form { padding:0 16px; flex-shrink:0; }
-.card-input-wrap { position:relative; margin-bottom:10px; }
-.card-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin-bottom:6px; display:block; }
+.card-input-wrap { margin-bottom:10px; }
+.card-label {
+  font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em;
+  color:#94A3B8; margin-bottom:6px; display:block;
+}
 .card-input {
-width:100%; background:var(--card); border:1px solid var(--border);
-border-radius:12px; padding:12px 14px; color:#fff; font-size:14px; font-family:‘DM Sans’,sans-serif;
-outline:none; transition:border-color 0.2s;
+  width:100%; background:#1E293B; border:1.5px solid rgba(255,255,255,0.08);
+  border-radius:12px; padding:12px 14px; color:#fff; font-size:14px; font-family:'Inter',sans-serif;
+  outline:none; transition:border-color 0.2s;
 }
 .card-input:focus { border-color:var(--lime); }
-.card-input::placeholder { color:var(--muted); }
+.card-input::placeholder { color:#94A3B8; }
 .card-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.s4-security {
-margin:14px 16px 0; display:flex; align-items:center; gap:8px;
-font-size:11px; color:var(--muted);
-}
+
+.s4-security { margin:14px 16px 0; display:flex; align-items:center; gap:8px; font-size:11px; color:#94A3B8; }
 .s4-pay-btn {
-margin:14px 16px 20px; width:calc(100%-32px);
-background:var(--lime); border:none; border-radius:18px; padding:16px;
-font-family:‘Syne’,sans-serif; font-size:16px; font-weight:800; color:var(--navy);
-cursor:pointer; width:calc(100% - 32px); display:flex; align-items:center; justify-content:center; gap:8px;
-transition:transform 0.15s; box-shadow:0 8px 32px rgba(200,240,77,0.25);
+  margin:14px 16px 20px; width:calc(100% - 32px);
+  background:var(--lime); border:none; border-radius:18px; padding:16px;
+  font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:800; color:var(--navy);
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:transform 0.15s, box-shadow 0.15s; box-shadow:0 8px 32px rgba(245,158,11,0.25);
 }
-.s4-pay-btn:hover { transform:scale(1.02); }
+.s4-pay-btn:hover { transform:scale(1.02); box-shadow:0 12px 40px rgba(245,158,11,0.38); }
 
 /* ── SCREEN 5: CONFIRMATION ── */
-#s5 {
-background:var(--navy); align-items:center;
-justify-content:flex-start;
-}
+#s5 { background:var(--navy); align-items:center; justify-content:flex-start; }
 .s5-confetti {
-position:absolute; top:0; left:0; right:0; height:200px;
-background:
-radial-gradient(circle at 20% 50%, rgba(200,240,77,0.2) 0%, transparent 40%),
-radial-gradient(circle at 80% 30%, rgba(255,92,77,0.15) 0%, transparent 40%),
-radial-gradient(circle at 50% 80%, rgba(123,92,245,0.2) 0%, transparent 50%);
-pointer-events:none;
+  position:absolute; top:0; left:0; right:0; height:200px;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(245,158,11,0.2) 0%, transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(239,68,68,0.15) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(139,92,246,0.2) 0%, transparent 50%);
+  pointer-events:none;
 }
 .s5-check {
-width:80px; height:80px; border-radius:50%;
-background:var(--lime); margin:70px auto 0;
-display:flex; align-items:center; justify-content:center;
-font-size:36px; position:relative; z-index:1;
-box-shadow:0 0 0 16px rgba(200,240,77,0.08), 0 0 0 32px rgba(200,240,77,0.04);
-animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  width:80px; height:80px; border-radius:50%;
+  background:var(--lime); margin:70px auto 0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:36px; position:relative; z-index:1; color:var(--navy);
+  box-shadow:0 0 0 16px rgba(245,158,11,0.08), 0 0 0 32px rgba(245,158,11,0.04);
+  animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
 }
 @keyframes popIn { from{transform:scale(0)} to{transform:scale(1)} }
-.s5-title { font-family:‘Syne’,sans-serif; font-size:26px; font-weight:800; text-align:center; margin:20px 16px 6px; }
-.s5-sub { font-size:13px; color:var(--muted); text-align:center; margin-bottom:24px; padding:0 24px; line-height:1.5; }
-.s5-order-card {
-margin:0 16px; width:calc(100% - 32px);
-background:var(--card); border:1px solid var(--border); border-radius:20px; padding:16px;
-}
-.s5-order-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:12px; }
+.s5-title { font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:800; text-align:center; margin:20px 16px 6px; color:#fff; }
+.s5-sub   { font-size:13px; color:#94A3B8; text-align:center; margin-bottom:24px; padding:0 24px; line-height:1.5; }
+
+.s5-order-card { margin:0 16px; width:calc(100% - 32px); background:#1E293B; border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:16px; }
+.s5-order-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#94A3B8; margin-bottom:12px; }
 .s5-order-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; }
-.s5-order-row + .s5-order-row { border-top:1px solid var(--border); }
-.s5-order-item { display:flex; align-items:center; gap:8px; }
+.s5-order-row + .s5-order-row { border-top:1px solid rgba(255,255,255,0.08); }
+.s5-order-item  { display:flex; align-items:center; gap:8px; }
 .s5-order-emoji { font-size:20px; }
-.s5-order-name { font-size:13px; font-weight:500; }
+.s5-order-name  { font-size:13px; font-weight:500; color:#fff; }
 .s5-order-price { font-size:13px; font-weight:700; color:var(--lime); }
-.s5-total-row { display:flex; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
-.s5-total-l { font-size:14px; font-weight:700; }
-.s5-total-r { font-family:‘Syne’,sans-serif; font-size:18px; font-weight:800; color:var(--lime); }
+.s5-total-row { display:flex; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.08); }
+.s5-total-l { font-size:14px; font-weight:700; color:#fff; }
+.s5-total-r { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:800; color:var(--lime); }
+
 .s5-rating {
-margin:14px 16px; width:calc(100% - 32px);
-background:linear-gradient(135deg,rgba(123,92,245,0.12),rgba(123,92,245,0.04));
-border:1px solid rgba(123,92,245,0.3); border-radius:20px; padding:16px;
+  margin:14px 16px; width:calc(100% - 32px);
+  background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(139,92,246,0.04));
+  border:1px solid rgba(139,92,246,0.3); border-radius:20px; padding:16px;
 }
-.s5-rating-title { font-family:‘Syne’,sans-serif; font-size:15px; font-weight:800; margin-bottom:4px; }
-.s5-rating-sub { font-size:12px; color:var(--muted); margin-bottom:12px; }
-.stars { display:flex; gap:8px; font-size:28px; cursor:pointer; }
-.star { transition:transform 0.15s; display:inline-block; }
+.s5-rating-title { font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:800; margin-bottom:4px; color:#fff; }
+.s5-rating-sub   { font-size:12px; color:#94A3B8; margin-bottom:12px; }
+.stars { display:flex; gap:8px; font-size:28px; }
+.star {
+  transition:transform 0.15s; display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer; background:none; border:none; font-size:28px; padding:0; line-height:1;
+  border-radius:4px;
+}
 .star:hover { transform:scale(1.2); }
-.s5-share {
-margin:0 16px 20px; width:calc(100% - 32px);
-display:flex; gap:10px;
-}
+
+.s5-share { margin:0 16px 20px; width:calc(100% - 32px); display:flex; gap:10px; }
 .s5-share-btn {
-flex:1; padding:13px; border-radius:14px; border:1px solid var(--border);
-background:var(--card); color:#fff; font-family:‘DM Sans’,sans-serif;
-font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s;
-display:flex; align-items:center; justify-content:center; gap:6px;
+  flex:1; padding:13px; border-radius:14px; border:1.5px solid rgba(255,255,255,0.08);
+  background:#1E293B; color:#fff; font-family:'Inter',sans-serif;
+  font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s;
+  display:flex; align-items:center; justify-content:center; gap:6px;
 }
 .s5-share-btn:hover { border-color:var(--lime); }
 .s5-share-btn.primary { background:var(--lime); color:var(--navy); border-color:var(--lime); }
+.s5-share-btn.primary:hover { box-shadow:0 6px 20px rgba(245,158,11,0.35); }
 
-/* ── ADMIN SCREEN (BONUS) ── */
-#s6 { background:#0A0A14; }
+/* ── SCREEN 6: ADMIN ── */
+#s6 { background:#0F172A; }
 .s6-header { padding:44px 16px 20px; flex-shrink:0; }
-.s6-greeting { font-size:12px; color:var(--muted); margin-bottom:4px; }
-.s6-title { font-family:‘Syne’,sans-serif; font-size:22px; font-weight:800; }
-.s6-date { font-size:11px; color:var(--muted); }
+.s6-greeting { font-size:12px; color:#94A3B8; margin-bottom:4px; }
+.s6-title    { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:800; color:#fff; }
+.s6-date     { font-size:11px; color:#94A3B8; }
 .s6-hero-card {
-margin:0 16px 12px;
-background:linear-gradient(135deg,rgba(200,240,77,0.15),rgba(200,240,77,0.03));
-border:1px solid rgba(200,240,77,0.25); border-radius:22px; padding:20px;
-position:relative; overflow:hidden; flex-shrink:0;
+  margin:0 16px 12px;
+  background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.03));
+  border:1px solid rgba(245,158,11,0.25); border-radius:22px; padding:20px;
+  position:relative; overflow:hidden; flex-shrink:0;
 }
-.s6-hero-card::after {
-content:‘💰’;
-position:absolute; right:-10px; bottom:-10px; font-size:80px; opacity:0.15;
-}
-.s6-hero-label { font-size:11px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
-.s6-hero-amount { font-family:‘Syne’,sans-serif; font-size:36px; font-weight:800; color:var(--lime); line-height:1; margin-bottom:8px; }
+.s6-hero-card::after { content:'💰'; position:absolute; right:-10px; bottom:-10px; font-size:80px; opacity:0.15; pointer-events:none; }
+.s6-hero-label  { font-size:11px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.s6-hero-amount { font-family:'Space Grotesk',sans-serif; font-size:36px; font-weight:800; color:var(--lime); line-height:1; margin-bottom:8px; }
 .s6-hero-uplift {
-display:inline-flex; align-items:center; gap:4px;
-background:rgba(200,240,77,0.15); border:1px solid rgba(200,240,77,0.2);
-border-radius:100px; padding:4px 10px;
-font-size:11px; color:var(--lime); font-weight:700;
+  display:inline-flex; align-items:center; gap:4px;
+  background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.2);
+  border-radius:100px; padding:4px 10px; font-size:11px; color:var(--lime); font-weight:700;
 }
 .s6-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 16px 12px; flex-shrink:0; }
-.s6-stat {
-background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px;
-}
-.s6-stat-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
-.s6-stat-val { font-family:‘Syne’,sans-serif; font-size:22px; font-weight:800; }
-.s6-stat-sub { font-size:10px; color:var(--muted); margin-top:2px; }
-.s6-stat.up .s6-stat-val { color:var(--lime); }
+.s6-stat { background:#1E293B; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:14px; }
+.s6-stat-label { font-size:10px; color:#94A3B8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+.s6-stat-val   { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:800; color:#fff; }
+.s6-stat-sub   { font-size:10px; color:#94A3B8; margin-top:2px; }
+.s6-stat.up   .s6-stat-val { color:var(--lime); }
 .s6-stat.warn .s6-stat-val { color:var(--coral); }
-.s6-chart-card {
-margin:0 16px 12px; background:var(--card); border:1px solid var(--border);
-border-radius:20px; padding:16px; flex-shrink:0;
-}
-.s6-chart-title { font-size:12px; font-weight:700; margin-bottom:12px; }
-.s6-chart-bars { display:flex; align-items:flex-end; gap:6px; height:60px; }
+.s6-chart-card { margin:0 16px 12px; background:#1E293B; border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:16px; flex-shrink:0; }
+.s6-chart-title { font-size:12px; font-weight:700; margin-bottom:12px; color:#fff; }
+.s6-chart-bars  { display:flex; align-items:flex-end; gap:6px; height:60px; }
 .s6-bar { flex:1; border-radius:6px 6px 0 0; position:relative; min-width:0; transition:all 0.3s; }
-.s6-bar::after { content:attr(data-day); position:absolute; bottom:-16px; left:50%; transform:translateX(-50%); font-size:9px; color:var(--muted); white-space:nowrap; }
+.s6-bar::after { content:attr(data-day); position:absolute; bottom:-16px; left:50%; transform:translateX(-50%); font-size:9px; color:#94A3B8; white-space:nowrap; }
 .s6-upsell {
-margin:0 16px 20px; background:linear-gradient(135deg,rgba(123,92,245,0.1),rgba(123,92,245,0.03));
-border:1px solid rgba(123,92,245,0.25); border-radius:20px; padding:16px; flex-shrink:0;
+  margin:0 16px 20px;
+  background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(139,92,246,0.03));
+  border:1px solid rgba(139,92,246,0.25); border-radius:20px; padding:16px; flex-shrink:0;
 }
-.s6-upsell-title { font-size:13px; font-weight:700; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+.s6-upsell-title { font-size:13px; font-weight:700; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; color:#fff; }
 .s6-upsell-title span { font-size:11px; color:#A78BFA; }
 .upsell-row-item { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
 .upsell-row-item:last-child { margin-bottom:0; }
@@ -557,615 +660,498 @@ border:1px solid rgba(123,92,245,0.25); border-radius:20px; padding:16px; flex-s
 .upsell-bar-fill { height:100%; border-radius:100px; background:#A78BFA; }
 .upsell-pct { font-size:11px; font-weight:700; color:#A78BFA; width:30px; text-align:right; }
 
-/* ── NAVIGATION ── */
-.nav-strip {
-display:flex; gap:12px; justify-content:center;
-padding:20px 20px 40px; flex-wrap:wrap;
-}
-.nav-btn {
-padding:10px 20px; border-radius:100px; font-size:13px; font-weight:600;
-cursor:pointer; transition:all 0.2s;
-border:1px solid var(--border); background:transparent; color:rgba(255,255,255,0.5);
-font-family:‘DM Sans’,sans-serif;
-}
-.nav-btn:hover { border-color:rgba(255,255,255,0.3); color:#fff; }
-
-/* ── SIDE PANEL: DESIGN NOTES ── */
-.design-notes {
-max-width:900px; margin:0 auto 80px; padding:0 24px;
-}
-.notes-title {
-font-family:‘Syne’,sans-serif; font-size:28px; font-weight:800;
-margin-bottom:8px; letter-spacing:-0.02em;
-}
-.notes-sub { font-size:14px; color:var(--muted); margin-bottom:40px; }
-.notes-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+/* ── DESIGN NOTES ── */
+.design-notes { max-width:900px; margin:0 auto 80px; padding:0 24px; }
+.notes-title { font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:800; margin-bottom:8px; letter-spacing:-0.02em; color:var(--text); }
+.notes-sub   { font-size:14px; color:var(--muted); margin-bottom:40px; }
+.notes-grid  { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
 .note-card {
-background:var(--card); border:1px solid var(--border); border-radius:20px;
-padding:20px; transition:border-color 0.2s;
+  background:var(--note-bg); border:1.5px solid var(--border); border-radius:20px;
+  padding:20px; transition:border-color 0.2s;
 }
-.note-card:hover { border-color:rgba(200,240,77,0.3); }
-.note-icon { font-size:28px; margin-bottom:12px; }
-.note-heading { font-family:‘Syne’,sans-serif; font-size:16px; font-weight:800; margin-bottom:6px; }
-.note-text { font-size:13px; color:var(--muted); line-height:1.6; }
-.note-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+.note-card:hover { border-color:rgba(245,158,11,0.35); }
+.note-icon    { font-size:28px; margin-bottom:12px; }
+.note-heading { font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:800; margin-bottom:6px; color:var(--note-heading); }
+.note-text    { font-size:13px; color:var(--note-text); line-height:1.6; }
+.note-tags    { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
 .note-tag {
-font-size:10px; padding:3px 10px; border-radius:100px;
-background:rgba(200,240,77,0.1); color:var(--lime);
-border:1px solid rgba(200,240,77,0.2); font-weight:600;
+  font-size:10px; padding:3px 10px; border-radius:100px;
+  background:rgba(245,158,11,0.1); color:var(--lime);
+  border:1px solid rgba(245,158,11,0.2); font-weight:600;
 }
 
-/* Scrollbar hide */
 ::-webkit-scrollbar { display:none; }
-
-/* Phone content scroll */
 .phone { overflow:hidden; }
-.phone .screen { overflow:hidden; }
-
-/* ── FLOW CONNECTOR ── */
-.flow-section {
-max-width:900px; margin:0 auto 60px; padding:0 24px;
-text-align:center;
-}
-.flow-title { font-family:‘Syne’,sans-serif; font-size:24px; font-weight:800; margin-bottom:32px; letter-spacing:-0.02em; }
-.flow-steps { display:flex; align-items:center; justify-content:center; gap:0; flex-wrap:wrap; gap:4px; }
-.flow-step {
-display:flex; flex-direction:column; align-items:center; gap:8px;
-width:120px;
-}
-.flow-num {
-width:44px; height:44px; border-radius:50%; border:2px solid var(--lime);
-display:flex; align-items:center; justify-content:center;
-font-family:‘Syne’,sans-serif; font-size:16px; font-weight:800; color:var(--lime);
-}
-.flow-step-label { font-size:11px; color:var(--muted); text-align:center; line-height:1.3; }
-.flow-arrow { color:var(--border); font-size:20px; margin-bottom:22px; }
 </style>
-
 </head>
 <body>
 
-<!-- HERO -->
+<!-- SKIP LINK — WCAG 2.4.1 -->
+<a class="skip-link" href="#demo-main">Skip to demo</a>
 
-<section class="hero">
-  <div class="hero-tag"><span></span> Gen-Z Ready Mockup · 5 Screens</div>
-  <h1>The menu that<br><em>makes money itself</em></h1>
-  <p>Tap through all 5 screens below. This is the exact demo flow to use with restaurant owners.</p>
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" type="button" id="theme-btn" aria-label="Switch to light theme" aria-pressed="false">☀️</button>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-heading">
+  <h1 id="hero-heading">The menu that<br><em>makes money itself</em></h1>
 </section>
 
 <!-- SCREEN TABS -->
-
-<div class="screen-tabs">
-  <button class="tab active" onclick="showScreen(1)">① Menu</button>
-  <button class="tab" onclick="showScreen(2)">② Item Detail</button>
-  <button class="tab" onclick="showScreen(3)">③ Cart + Upsell</button>
-  <button class="tab" onclick="showScreen(4)">④ Payment</button>
-  <button class="tab" onclick="showScreen(5)">⑤ Confirmation</button>
-  <button class="tab" onclick="showScreen(6)">⑥ Admin Dashboard</button>
+<div class="screen-tabs" role="tablist" aria-label="Demo screens navigation">
+  <button class="tab active" type="button" role="tab" aria-selected="true"  id="tab-1" aria-controls="s1" onclick="showScreen(1)">① Menu</button>
+  <button class="tab"        type="button" role="tab" aria-selected="false" id="tab-2" aria-controls="s2" onclick="showScreen(2)">② Item Detail</button>
+  <button class="tab"        type="button" role="tab" aria-selected="false" id="tab-3" aria-controls="s3" onclick="showScreen(3)">③ Cart + Upsell</button>
+  <button class="tab"        type="button" role="tab" aria-selected="false" id="tab-4" aria-controls="s4" onclick="showScreen(4)">④ Payment</button>
+  <button class="tab"        type="button" role="tab" aria-selected="false" id="tab-5" aria-controls="s5" onclick="showScreen(5)">⑤ Confirmation</button>
+  <button class="tab"        type="button" role="tab" aria-selected="false" id="tab-6" aria-controls="s6" onclick="showScreen(6)">⑥ Admin Dashboard</button>
 </div>
 
-<!-- FLOW -->
-
-<div class="flow-section">
+<!-- FLOW DIAGRAM -->
+<nav class="flow-section" aria-label="Customer journey">
   <div class="flow-steps">
-    <div class="flow-step"><div class="flow-num">1</div><div class="flow-step-label">Scan QR<br>Browse Menu</div></div>
-    <div class="flow-arrow">→</div>
+    <div class="flow-step active"><div class="flow-num">1</div><div class="flow-step-label">Scan QR<br>Browse Menu</div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
     <div class="flow-step"><div class="flow-num">2</div><div class="flow-step-label">View Item<br>Choose Options</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="flow-num">3</div><div class="flow-step-label">Cart +<br><strong style="color:var(--lime)">Upsell Prompt</strong></div></div>
-    <div class="flow-arrow">→</div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-step-label">Cart +<br><strong style="color:var(--lime)">Upsell</strong></div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
     <div class="flow-step"><div class="flow-num">4</div><div class="flow-step-label">Tap to<br>Pay</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step"><div class="flow-num">5</div><div class="flow-step-label">Confirmed +<br>Rate</div></div>
+    <div class="flow-arrow" aria-hidden="true">→</div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-step-label">Confirmed<br>+ Rate</div></div>
   </div>
-</div>
+</nav>
 
-<!-- DEMO STAGE -->
+<!-- DEMO -->
+<main id="demo-main">
+  <div class="demo-stage">
+    <div class="phone-wrap">
+      <div class="phone-label" id="screen-label" aria-live="polite" aria-atomic="true">Screen 1 — Menu Landing</div>
+      <div class="phone" role="region" aria-label="Phone app demo">
 
-<div class="demo-stage">
-  <div class="phone-wrap">
-    <div class="phone-label" id="screen-label">Screen 1 — Menu Landing</div>
-    <div class="phone">
-
-  <!-- SCREEN 1: MENU -->
-  <div class="screen active" id="s1">
-    <div class="s1-hero">
-      <div class="s1-hero-img-inner">🍛</div>
-      <div class="s1-hero-overlay"></div>
-      <div class="s1-table-badge">Table 7</div>
-      <div class="s1-restaurant-name">
-        <h2>Spice Garden</h2>
-        <p>Birmingham · Indian & South Asian</p>
-      </div>
-    </div>
-
-    <div class="s1-filters">
-      <div class="s1-filter on">All</div>
-      <div class="s1-filter">⭐ Chef's Pick</div>
-      <div class="s1-filter">🌿 Veg Only</div>
-      <div class="s1-filter">🔥 Trending</div>
-      <div class="s1-filter">💸 Low→High</div>
-    </div>
-
-    <div class="s1-section-title">Chef's Specials</div>
-
-    <div class="s1-items">
-      <div class="item-card" onclick="showScreen(2)">
-        <div class="item-img curry">🍛</div>
-        <div class="item-info">
-          <div class="item-name">Lamb Rogan Josh</div>
-          <div class="item-desc">Slow-cooked, aromatic spices, tender lamb</div>
-          <div class="item-tags">
-            <span class="tag chef">⭐ Chef's Pick</span>
-            <span class="tag spice">🌶 Medium</span>
+        <!-- SCREEN 1: MENU -->
+        <div class="screen active" id="s1" role="tabpanel" aria-labelledby="tab-1">
+          <div class="s1-hero" aria-hidden="true">
+            <div class="s1-hero-img-inner">🍛</div>
+            <div class="s1-hero-overlay"></div>
+            <div class="s1-table-badge">Table 7</div>
+            <div class="s1-restaurant-name">
+              <h2>Spice Garden</h2>
+              <p>Birmingham · Indian &amp; South Asian</p>
+            </div>
           </div>
-          <div class="item-meta">
-            <span class="item-price">£14.50</span>
-            <span class="item-rating">⭐ 4.9 (312)</span>
+
+          <div class="s1-filters" role="group" aria-label="Filter menu items">
+            <button type="button" class="s1-filter on"  onclick="toggleFilter(this)">All</button>
+            <button type="button" class="s1-filter"     onclick="toggleFilter(this)">⭐ Chef's Pick</button>
+            <button type="button" class="s1-filter"     onclick="toggleFilter(this)">🌿 Veg Only</button>
+            <button type="button" class="s1-filter"     onclick="toggleFilter(this)">🔥 Trending</button>
+            <button type="button" class="s1-filter"     onclick="toggleFilter(this)">💸 Low→High</button>
+          </div>
+
+          <div class="s1-section-title">Chef's Specials</div>
+
+          <ul class="s1-items" id="menu-list" aria-label="Menu items">
+            <li class="item-card" data-tags="chef,spicy" data-price="14.50" tabindex="0" role="button" aria-label="Lamb Rogan Josh £14.50 — tap to view details" onclick="showScreen(2)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScreen(2)}">
+              <div class="item-img curry" aria-hidden="true"><img src="/images/lamb-rogan-josh.jpg" alt="Lamb Rogan Josh dish"></div>
+              <div class="item-info">
+                <div class="item-name">Lamb Rogan Josh</div>
+                <div class="item-desc">Slow-cooked, aromatic spices, tender lamb</div>
+                <div class="item-tags"><span class="tag chef">⭐ Chef's Pick</span><span class="tag spice">🌶 Medium</span></div>
+                <div class="item-meta"><span class="item-price">£14.50</span><span class="item-rating">⭐ 4.9 (312)</span></div>
+              </div>
+              <button type="button" class="item-add" aria-label="Add Lamb Rogan Josh to cart" onclick="event.stopPropagation();showScreen(3)">+</button>
+            </li>
+            <li class="item-card" data-tags="trending" data-price="13.00" tabindex="0" role="button" aria-label="Chicken Biryani £13.00 — add to cart" onclick="showScreen(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScreen(3)}">
+              <div class="item-img biryani" aria-hidden="true">🍚</div>
+              <div class="item-info">
+                <div class="item-name">Chicken Biryani</div>
+                <div class="item-desc">Fragrant basmati, saffron, raita included</div>
+                <div class="item-tags"><span class="tag spice">🌶 Mild</span></div>
+                <div class="item-meta"><span class="item-price">£13.00</span><span class="item-rating">⭐ 4.7 (198)</span></div>
+              </div>
+              <button type="button" class="item-add" aria-label="Add Chicken Biryani to cart" onclick="event.stopPropagation();showScreen(3)">+</button>
+            </li>
+            <li class="item-card" data-tags="veg,trending" data-price="3.50" tabindex="0" role="button" aria-label="Peshwari Naan £3.50 — add to cart" onclick="showScreen(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScreen(3)}">
+              <div class="item-img bread" aria-hidden="true">🫓</div>
+              <div class="item-info">
+                <div class="item-name">Peshwari Naan</div>
+                <div class="item-desc">Coconut, almond, light brush of ghee</div>
+                <div class="item-tags"><span class="tag veg">🌿 Veg</span></div>
+                <div class="item-meta"><span class="item-price">£3.50</span><span class="item-rating">⭐ 4.8 (521)</span></div>
+              </div>
+              <button type="button" class="item-add" aria-label="Add Peshwari Naan to cart" onclick="event.stopPropagation();showScreen(3)">+</button>
+            </li>
+            <li class="item-card" data-tags="veg,trending" data-price="4.00" tabindex="0" role="button" aria-label="Mango Lassi £4.00 — add to cart" onclick="showScreen(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScreen(3)}">
+              <div class="item-img drink" aria-hidden="true">🥭</div>
+              <div class="item-info">
+                <div class="item-name">Mango Lassi</div>
+                <div class="item-desc">Fresh Alphonso mango, thick yoghurt</div>
+                <div class="item-tags"><span class="tag veg">🌿 Veg</span></div>
+                <div class="item-meta"><span class="item-price">£4.00</span><span class="item-rating">⭐ 4.9 (445)</span></div>
+              </div>
+              <button type="button" class="item-add" aria-label="Add Mango Lassi to cart" onclick="event.stopPropagation();showScreen(3)">+</button>
+            </li>
+          </ul>
+
+          <button type="button" class="cart-bar" onclick="showScreen(3)" aria-label="View cart — 2 items, total £27.50">
+            <div class="cart-bar-left">
+              <div class="cart-count" aria-hidden="true">2</div>
+              <div class="cart-bar-text">View Cart</div>
+            </div>
+            <div class="cart-bar-price">£27.50</div>
+          </button>
+        </div>
+
+        <!-- SCREEN 2: ITEM DETAIL -->
+        <div class="screen" id="s2" role="tabpanel" aria-labelledby="tab-2">
+          <div class="s2-img" aria-hidden="true">
+            <img src="/images/rogan-josh.jpg" alt="Lamb Rogan Josh dish">
+            <div class="s2-img-glow"></div>
+          </div>
+          <button type="button" class="s2-back" onclick="showScreen(1)" aria-label="Back to menu">←</button>
+          <button type="button" class="s2-fav"  aria-label="Save to favourites" aria-pressed="false" onclick="toggleFav(this)">🤍</button>
+
+          <div class="s2-content">
+            <div class="s2-chef-badge">⭐ Chef's Special This Week</div>
+            <h2 class="s2-name">Lamb Rogan Josh</h2>
+            <div class="s2-meta">
+              <div class="s2-price">£14.50</div>
+              <div class="s2-stars">⭐ 4.9 · 312 ratings</div>
+            </div>
+            <p class="s2-desc">Our signature slow-cooked lamb in a rich, aromatic Kashmiri sauce. Simmered for 6 hours with whole spices, dried chillies and a touch of yoghurt. Best paired with our Peshwari Naan.</p>
+            <div class="s2-tags">
+              <span class="tag spice">🌶 Medium Heat</span>
+              <span class="tag chef">Gluten Free</span>
+            </div>
+
+            <div class="s2-section" id="spice-group-label">Spice Level</div>
+            <div class="s2-spice" role="radiogroup" aria-labelledby="spice-group-label">
+              <button type="button" class="spice-btn" role="radio" aria-checked="false" onclick="selectSpice(this)"><span class="chilli-row">🌶</span><span>Mild</span></button>
+              <button type="button" class="spice-btn active" role="radio" aria-checked="true" onclick="selectSpice(this)"><span class="chilli-row">🌶🌶</span><span>Medium</span></button>
+              <button type="button" class="spice-btn" role="radio" aria-checked="false" onclick="selectSpice(this)"><span class="chilli-row">🌶🌶🌶</span><span>Hot</span></button>
+              <button type="button" class="spice-btn" role="radio" aria-checked="false" onclick="selectSpice(this)"><span class="chilli-row">🌶🌶🌶🌶</span><span>Extra</span></button>
+            </div>
+
+            <div class="s2-allergens" role="note" aria-label="Allergen information">
+              <strong style="color:#fff;font-size:12px;">⚠️ Allergens:</strong> Contains dairy (yoghurt). Free from: nuts, gluten, eggs. Always inform your server of any allergies.
+            </div>
+          </div>
+
+          <div class="s2-cta">
+            <div class="s2-qty" role="group" aria-label="Quantity">
+              <button type="button" class="qty-btn" aria-label="Decrease quantity" onclick="changeQty(-1)">−</button>
+              <div class="qty-num" id="qty-display" aria-live="polite">1</div>
+              <button type="button" class="qty-btn" aria-label="Increase quantity" onclick="changeQty(1)">+</button>
+            </div>
+            <button type="button" class="s2-add-btn" onclick="showScreen(3)" aria-label="Add 1 Lamb Rogan Josh to cart for £14.50">Add to Cart · £14.50</button>
           </div>
         </div>
-        <button class="item-add" onclick="event.stopPropagation(); showScreen(3)">+</button>
-      </div>
 
-      <div class="item-card" onclick="showScreen(3)">
-        <div class="item-img biryani">🍚</div>
-        <div class="item-info">
-          <div class="item-name">Chicken Biryani</div>
-          <div class="item-desc">Fragrant basmati, saffron, raita included</div>
-          <div class="item-tags">
-            <span class="tag spice">🌶 Mild</span>
+        <!-- SCREEN 3: CART + UPSELL -->
+        <div class="screen" id="s3" style="overflow-y:auto;" role="tabpanel" aria-labelledby="tab-3">
+          <div class="s3-header">
+            <h2 class="s3-title">Your Order</h2>
+            <button type="button" class="s3-edit" onclick="showScreen(1)" aria-label="Add more items">+ Add more</button>
           </div>
-          <div class="item-meta">
-            <span class="item-price">£13.00</span>
-            <span class="item-rating">⭐ 4.7 (198)</span>
+
+          <ul class="s3-items" aria-label="Items in cart">
+            <li class="cart-item">
+              <div class="cart-item-emoji" aria-hidden="true">🍛</div>
+              <div class="cart-item-info">
+                <div class="cart-item-name">Lamb Rogan Josh</div>
+                <div class="cart-item-sub">Medium heat · x1</div>
+              </div>
+              <div class="cart-item-price">£14.50</div>
+            </li>
+            <li class="cart-item">
+              <div class="cart-item-emoji" aria-hidden="true">🍚</div>
+              <div class="cart-item-info">
+                <div class="cart-item-name">Chicken Biryani</div>
+                <div class="cart-item-sub">Mild · x1</div>
+              </div>
+              <div class="cart-item-price">£13.00</div>
+            </li>
+          </ul>
+
+          <div class="upsell-card" role="complementary" aria-label="Suggested item: Peshwari Naan">
+            <div class="upsell-badge">🧠 87% also ordered</div>
+            <div class="upsell-row">
+              <div class="upsell-emoji" aria-hidden="true">🫓</div>
+              <div class="upsell-info">
+                <div class="upsell-text">Perfect with Lamb Rogan Josh</div>
+                <div class="upsell-name">Peshwari Naan</div>
+                <div class="upsell-price">+ £3.50</div>
+              </div>
+              <button type="button" class="upsell-add" aria-label="Add Peshwari Naan for £3.50" onclick="this.textContent='✓ Added';this.style.background='#10B981';this.disabled=true;this.setAttribute('aria-pressed','true')">Add</button>
+            </div>
+          </div>
+
+          <div class="s3-promo">
+            <div class="promo-icon" aria-hidden="true">🏷️</div>
+            <div class="promo-text">
+              <label class="promo-label" for="promo-code">Promo Code</label>
+              <input id="promo-code" class="promo-input" type="text" placeholder="Enter code e.g. SPICE20" autocomplete="off" spellcheck="false">
+            </div>
+          </div>
+
+          <div class="s3-summary" aria-label="Order total breakdown">
+            <div class="summary-row"><div class="summary-label">Subtotal</div><div class="summary-val">£27.50</div></div>
+            <div class="summary-row"><div class="summary-label">Service charge (12.5%)</div><div class="summary-val">£3.44</div></div>
+            <div class="summary-row"><div class="summary-label" style="color:#34D399;">Promo discount</div><div class="summary-val" style="color:#34D399;">−£0.00</div></div>
+            <div class="summary-divider" role="separator"></div>
+            <div class="summary-row summary-total"><div class="summary-label">Total</div><div class="summary-val">£30.94</div></div>
+          </div>
+
+          <button type="button" class="s3-pay-btn" onclick="showScreen(4)" aria-label="Proceed to payment — total £30.94">
+            <span class="pay-icon" aria-hidden="true">💳</span> Proceed to Pay
+          </button>
+        </div>
+
+        <!-- SCREEN 4: PAYMENT -->
+        <div class="screen" id="s4" style="overflow-y:auto;" role="tabpanel" aria-labelledby="tab-4">
+          <div class="s4-header">
+            <button type="button" class="s4-back" onclick="showScreen(3)" aria-label="Back to cart">←</button>
+            <h2 class="s4-title">Pay Now</h2>
+            <div class="s4-subtitle">Secure · Encrypted · Instant</div>
+          </div>
+
+          <div class="s4-total-card">
+            <div>
+              <div class="s4-total-label">Total Due</div>
+              <div class="s4-total-amount" aria-label="£30.94">£30.94</div>
+            </div>
+            <div class="s4-total-icon" aria-hidden="true">🔒</div>
+          </div>
+
+          <div class="s4-methods">
+            <div class="s4-methods-title" id="pay-method-lbl">Choose Payment</div>
+            <div class="method-grid" role="radiogroup" aria-labelledby="pay-method-lbl">
+              <button type="button" class="method-card active" role="radio" aria-checked="true"  onclick="setMethod(this)"><div class="method-icon" aria-hidden="true">📱</div><div class="method-name">Apple Pay</div><div class="method-sub">Touch ID</div></button>
+              <button type="button" class="method-card"        role="radio" aria-checked="false" onclick="setMethod(this)"><div class="method-icon" aria-hidden="true">🅶</div><div class="method-name">Google Pay</div><div class="method-sub">One tap</div></button>
+              <button type="button" class="method-card"        role="radio" aria-checked="false" onclick="setMethod(this)"><div class="method-icon" aria-hidden="true">💳</div><div class="method-name">Card</div><div class="method-sub">Visa / MC / Amex</div></button>
+              <button type="button" class="method-card"        role="radio" aria-checked="false" onclick="setMethod(this)"><div class="method-icon" aria-hidden="true">🏦</div><div class="method-name">UPI / Bank</div><div class="method-sub">Instant transfer</div></button>
+            </div>
+          </div>
+
+          <fieldset class="s4-card-form" style="border:none;">
+            <legend class="card-label" style="margin-bottom:10px;padding:0;">Card Details</legend>
+            <div class="card-input-wrap">
+              <label class="card-label" for="card-number">Card Number</label>
+              <input id="card-number" class="card-input" type="text" inputmode="numeric" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number" aria-required="true">
+            </div>
+            <div class="card-row">
+              <div class="card-input-wrap">
+                <label class="card-label" for="card-expiry">Expiry</label>
+                <input id="card-expiry" class="card-input" type="text" inputmode="numeric" placeholder="MM / YY" autocomplete="cc-exp" aria-required="true">
+              </div>
+              <div class="card-input-wrap">
+                <label class="card-label" for="card-cvc">CVC</label>
+                <input id="card-cvc" class="card-input" type="text" inputmode="numeric" placeholder="•••" maxlength="4" autocomplete="cc-csc" aria-required="true">
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="s4-security">🔒 256-bit SSL · PCI DSS compliant</div>
+
+          <button type="button" class="s4-pay-btn" onclick="showScreen(5)" aria-label="Pay £30.94 securely now">
+            Pay £30.94 →
+          </button>
+        </div>
+
+        <!-- SCREEN 5: CONFIRMATION -->
+        <div class="screen" id="s5" style="overflow-y:auto;" role="tabpanel" aria-labelledby="tab-5">
+          <div class="s5-confetti" aria-hidden="true"></div>
+          <div class="s5-check" role="img" aria-label="Order confirmed">✓</div>
+          <h2 class="s5-title">Order Confirmed! 🎉</h2>
+          <p class="s5-sub">Your food is being prepared. We'll bring it to Table 7 shortly.</p>
+
+          <div class="s5-order-card">
+            <div class="s5-order-title">Order Summary</div>
+            <div class="s5-order-row"><div class="s5-order-item"><span class="s5-order-emoji" aria-hidden="true">🍛</span><span class="s5-order-name">Lamb Rogan Josh</span></div><div class="s5-order-price">£14.50</div></div>
+            <div class="s5-order-row"><div class="s5-order-item"><span class="s5-order-emoji" aria-hidden="true">🍚</span><span class="s5-order-name">Chicken Biryani</span></div><div class="s5-order-price">£13.00</div></div>
+            <div class="s5-order-row"><div class="s5-order-item"><span class="s5-order-emoji" aria-hidden="true">🫓</span><span class="s5-order-name">Peshwari Naan</span></div><div class="s5-order-price">£3.50</div></div>
+            <div class="s5-total-row"><div class="s5-total-l">Total Paid</div><div class="s5-total-r">£34.44</div></div>
+          </div>
+
+          <div class="s5-rating">
+            <div class="s5-rating-title">How was it? ⭐</div>
+            <p class="s5-rating-sub">Rate your dishes — takes 10 seconds</p>
+            <div class="stars" role="group" aria-label="Rate your experience">
+              <button type="button" class="star" onclick="rateStar(1)" aria-label="1 star">⭐</button>
+              <button type="button" class="star" onclick="rateStar(2)" aria-label="2 stars">⭐</button>
+              <button type="button" class="star" onclick="rateStar(3)" aria-label="3 stars">⭐</button>
+              <button type="button" class="star" onclick="rateStar(4)" aria-label="4 stars">⭐</button>
+              <button type="button" class="star" onclick="rateStar(5)" aria-label="5 stars">⭐</button>
+            </div>
+          </div>
+
+          <div class="s5-share">
+            <button type="button" class="s5-share-btn" aria-label="Share your experience">📲 Share</button>
+            <button type="button" class="s5-share-btn primary" onclick="showScreen(1)" aria-label="Start a new order">🍽️ Order Again</button>
           </div>
         </div>
-        <button class="item-add" onclick="event.stopPropagation(); showScreen(3)">+</button>
-      </div>
 
-      <div class="item-card" onclick="showScreen(3)">
-        <div class="item-img bread">🫓</div>
-        <div class="item-info">
-          <div class="item-name">Peshwari Naan</div>
-          <div class="item-desc">Coconut, almond, light brush of ghee</div>
-          <div class="item-tags">
-            <span class="tag veg">🌿 Veg</span>
+        <!-- SCREEN 6: ADMIN DASHBOARD -->
+        <div class="screen" id="s6" style="overflow-y:auto;" role="tabpanel" aria-labelledby="tab-6">
+          <div class="s6-header">
+            <div class="s6-greeting">Good evening, Ravi 👋</div>
+            <h2 class="s6-title">Revenue Dashboard</h2>
+            <div class="s6-date">Thursday, 26 March 2026</div>
           </div>
-          <div class="item-meta">
-            <span class="item-price">£3.50</span>
-            <span class="item-rating">⭐ 4.8 (521)</span>
+          <div class="s6-hero-card" aria-label="£1,872 revenue added this month — up 18.4%">
+            <div class="s6-hero-label">Revenue Added This Month</div>
+            <div class="s6-hero-amount">£1,872</div>
+            <div class="s6-hero-uplift">↑ +18.4% vs last month</div>
+          </div>
+          <div class="s6-stats">
+            <div class="s6-stat up"><div class="s6-stat-label">Avg Order Value</div><div class="s6-stat-val">£31.40</div><div class="s6-stat-sub">↑ from £26.60 last month</div></div>
+            <div class="s6-stat up"><div class="s6-stat-label">Upsell Conversion</div><div class="s6-stat-val">34%</div><div class="s6-stat-sub">↑ from 28% last week</div></div>
+            <div class="s6-stat"><div class="s6-stat-label">Orders Today</div><div class="s6-stat-val" style="color:#fff;">147</div><div class="s6-stat-sub">Lunch peak: 12–2pm</div></div>
+            <div class="s6-stat warn"><div class="s6-stat-label">Items Low Stock</div><div class="s6-stat-val">3</div><div class="s6-stat-sub">Tap to review</div></div>
+          </div>
+          <div class="s6-chart-card">
+            <div class="s6-chart-title">Weekly Revenue (£)</div>
+            <div class="s6-chart-bars" role="img" aria-label="Weekly revenue bar chart, Friday highest">
+              <div class="s6-bar" style="height:55%;background:rgba(245,158,11,0.3);" data-day="Mon"></div>
+              <div class="s6-bar" style="height:70%;background:rgba(245,158,11,0.4);" data-day="Tue"></div>
+              <div class="s6-bar" style="height:45%;background:rgba(245,158,11,0.3);" data-day="Wed"></div>
+              <div class="s6-bar" style="height:85%;background:rgba(245,158,11,0.5);" data-day="Thu"></div>
+              <div class="s6-bar" style="height:100%;background:var(--lime);"         data-day="Fri"></div>
+              <div class="s6-bar" style="height:95%;background:rgba(245,158,11,0.8);" data-day="Sat"></div>
+              <div class="s6-bar" style="height:60%;background:rgba(245,158,11,0.35);" data-day="Sun"></div>
+            </div>
+          </div>
+          <div class="s6-upsell">
+            <div class="s6-upsell-title">Top Upsell Pairs <span>This week</span></div>
+            <div class="upsell-row-item"><div class="upsell-row-label">🍛 Rogan Josh → 🫓 Peshwari Naan</div><div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:87%"></div></div><div class="upsell-pct">87%</div></div>
+            <div class="upsell-row-item"><div class="upsell-row-label">🍚 Biryani → 🥭 Mango Lassi</div><div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:72%"></div></div><div class="upsell-pct">72%</div></div>
+            <div class="upsell-row-item"><div class="upsell-row-label">🍗 Tikka → 🧅 Onion Bhaji</div><div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:58%"></div></div><div class="upsell-pct">58%</div></div>
           </div>
         </div>
-        <button class="item-add" onclick="event.stopPropagation(); showScreen(3)">+</button>
-      </div>
 
-      <div class="item-card" onclick="showScreen(3)">
-        <div class="item-img drink">🥭</div>
-        <div class="item-info">
-          <div class="item-name">Mango Lassi</div>
-          <div class="item-desc">Fresh Alphonso mango, thick yoghurt</div>
-          <div class="item-tags">
-            <span class="tag veg">🌿 Veg</span>
-          </div>
-          <div class="item-meta">
-            <span class="item-price">£4.00</span>
-            <span class="item-rating">⭐ 4.9 (445)</span>
-          </div>
-        </div>
-        <button class="item-add" onclick="event.stopPropagation(); showScreen(3)">+</button>
-      </div>
-    </div>
+      </div><!-- end phone -->
+    </div><!-- end phone-wrap -->
+  </div><!-- end demo-stage -->
+</main>
 
-    <div class="cart-bar" onclick="showScreen(3)">
-      <div class="cart-bar-left">
-        <div class="cart-count">2</div>
-        <div class="cart-bar-text">View Cart</div>
-      </div>
-      <div class="cart-bar-price">£27.50</div>
-    </div>
-  </div>
-
-  <!-- SCREEN 2: ITEM DETAIL -->
-  <div class="screen" id="s2">
-    <div class="s2-img">
-      <div class="s2-img-glow"></div>
-      🍛
-    </div>
-    <div class="s2-back" onclick="showScreen(1)">←</div>
-    <div class="s2-fav">🤍</div>
-
-    <div class="s2-content">
-      <div class="s2-chef-badge">⭐ Chef's Special This Week</div>
-      <div class="s2-name">Lamb Rogan Josh</div>
-      <div class="s2-meta">
-        <div class="s2-price">£14.50</div>
-        <div class="s2-stars">⭐ 4.9 · 312 ratings</div>
-      </div>
-      <div class="s2-desc">Our signature slow-cooked lamb in a rich, aromatic Kashmiri sauce. Simmered for 6 hours with whole spices, dried chillies and a touch of yoghurt. Best paired with our Peshwari Naan.</div>
-      <div class="s2-tags">
-        <span class="tag spice">🌶 Medium Heat</span>
-        <span class="tag chef">Gluten Free</span>
-      </div>
-
-      <div class="s2-section">Spice Level</div>
-      <div class="s2-spice">
-        <div class="spice-btn"><span style="font-size:22px">😌</span><span>Mild</span></div>
-        <div class="spice-btn active"><span style="font-size:22px">😤</span><span>Medium</span></div>
-        <div class="spice-btn"><span style="font-size:22px">🔥</span><span>Hot</span></div>
-        <div class="spice-btn"><span style="font-size:22px">💀</span><span>Extra</span></div>
-      </div>
-
-      <div class="s2-allergens">
-        <strong style="color:#fff;font-size:12px;">⚠️ Allergens:</strong> Contains dairy (yoghurt). Free from: nuts, gluten, eggs. Always inform your server of any allergies.
-      </div>
-    </div>
-
-    <div class="s2-cta">
-      <div class="s2-qty">
-        <button class="qty-btn">−</button>
-        <div class="qty-num">1</div>
-        <button class="qty-btn">+</button>
-      </div>
-      <button class="s2-add-btn" onclick="showScreen(3)">Add to Cart · £14.50</button>
-    </div>
-  </div>
-
-  <!-- SCREEN 3: CART + UPSELL -->
-  <div class="screen" id="s3" style="overflow-y:auto;">
-    <div class="s3-header">
-      <div class="s3-title">Your Order</div>
-      <div class="s3-edit" onclick="showScreen(1)">+ Add more</div>
-    </div>
-
-    <div class="s3-items">
-      <div class="cart-item">
-        <div class="cart-item-emoji">🍛</div>
-        <div class="cart-item-info">
-          <div class="cart-item-name">Lamb Rogan Josh</div>
-          <div class="cart-item-sub">Medium heat · x1</div>
-        </div>
-        <div class="cart-item-price">£14.50</div>
-      </div>
-      <div class="cart-item">
-        <div class="cart-item-emoji">🍚</div>
-        <div class="cart-item-info">
-          <div class="cart-item-name">Chicken Biryani</div>
-          <div class="cart-item-sub">Mild · x1</div>
-        </div>
-        <div class="cart-item-price">£13.00</div>
-      </div>
-    </div>
-
-    <!-- THE UPSELL MOMENT -->
-    <div class="upsell-card">
-      <div class="upsell-badge">🧠 87% also ordered</div>
-      <div class="upsell-row">
-        <div class="upsell-emoji">🫓</div>
-        <div class="upsell-info">
-          <div class="upsell-text">Perfect with Lamb Rogan Josh</div>
-          <div class="upsell-name">Peshwari Naan</div>
-          <div class="upsell-price">+ £3.50</div>
-        </div>
-        <button class="upsell-add" onclick="this.textContent='✓ Added';this.style.background='#10B981'">Add</button>
-      </div>
-    </div>
-
-    <div class="s3-promo">
-      <div class="promo-icon">🏷️</div>
-      <div class="promo-text">
-        <div style="font-size:12px;font-weight:600;color:#fff;margin-bottom:3px;">Promo Code</div>
-        <input class="promo-input" placeholder="Enter code e.g. SPICE20">
-      </div>
-    </div>
-
-    <div class="s3-summary">
-      <div class="summary-row">
-        <div class="summary-label">Subtotal</div>
-        <div class="summary-val">£27.50</div>
-      </div>
-      <div class="summary-row">
-        <div class="summary-label">Service charge (12.5%)</div>
-        <div class="summary-val">£3.44</div>
-      </div>
-      <div class="summary-row">
-        <div class="summary-label" style="color:#34D399;">Promo discount</div>
-        <div class="summary-val" style="color:#34D399;">−£0.00</div>
-      </div>
-      <div class="summary-divider"></div>
-      <div class="summary-row summary-total">
-        <div class="summary-label">Total</div>
-        <div class="summary-val">£30.94</div>
-      </div>
-    </div>
-
-    <button class="s3-pay-btn" onclick="showScreen(4)">
-      <span class="pay-icon">💳</span> Proceed to Pay
-    </button>
-  </div>
-
-  <!-- SCREEN 4: PAYMENT -->
-  <div class="screen" id="s4" style="overflow-y:auto;">
-    <div class="s4-header">
-      <span class="s4-back" onclick="showScreen(3)">←</span>
-      <div class="s4-title">Pay Now</div>
-      <div class="s4-subtitle">Secure · Encrypted · Instant</div>
-    </div>
-
-    <div class="s4-total-card">
-      <div>
-        <div class="s4-total-label">Total Due</div>
-        <div class="s4-total-amount">£30.94</div>
-      </div>
-      <div class="s4-total-icon">🔒</div>
-    </div>
-
-    <div class="s4-methods">
-      <div class="s4-methods-title">Choose Payment</div>
-      <div class="method-grid">
-        <div class="method-card active" onclick="setMethod(this)">
-          <div class="method-icon">📱</div>
-          <div class="method-name">Apple Pay</div>
-          <div class="method-sub">Touch ID</div>
-        </div>
-        <div class="method-card" onclick="setMethod(this)">
-          <div class="method-icon">🅶</div>
-          <div class="method-name">Google Pay</div>
-          <div class="method-sub">One tap</div>
-        </div>
-        <div class="method-card" onclick="setMethod(this)">
-          <div class="method-icon">💳</div>
-          <div class="method-name">Card</div>
-          <div class="method-sub">Visa / MC / Amex</div>
-        </div>
-        <div class="method-card" onclick="setMethod(this)">
-          <div class="method-icon">🏦</div>
-          <div class="method-name">UPI / Bank</div>
-          <div class="method-sub">Instant transfer</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="s4-card-form">
-      <div class="card-input-wrap">
-        <label class="card-label">Card Number</label>
-        <input class="card-input" placeholder="1234 5678 9012 3456" maxlength="19">
-      </div>
-      <div class="card-row">
-        <div class="card-input-wrap">
-          <label class="card-label">Expiry</label>
-          <input class="card-input" placeholder="MM / YY">
-        </div>
-        <div class="card-input-wrap">
-          <label class="card-label">CVC</label>
-          <input class="card-input" placeholder="•••">
-        </div>
-      </div>
-    </div>
-
-    <div class="s4-security">🔒 256-bit SSL encrypted · PCI DSS compliant</div>
-
-    <button class="s4-pay-btn" onclick="showScreen(5)">
-      Pay £30.94 →
-    </button>
-  </div>
-
-  <!-- SCREEN 5: CONFIRMATION -->
-  <div class="screen" id="s5" style="overflow-y:auto;">
-    <div class="s5-confetti"></div>
-
-    <div class="s5-check">✓</div>
-    <div class="s5-title">Order Confirmed! 🎉</div>
-    <div class="s5-sub">Your food is being prepared. We'll bring it to Table 7 shortly.</div>
-
-    <div class="s5-order-card">
-      <div class="s5-order-title">Order Summary</div>
-      <div class="s5-order-row">
-        <div class="s5-order-item"><span class="s5-order-emoji">🍛</span><span class="s5-order-name">Lamb Rogan Josh</span></div>
-        <div class="s5-order-price">£14.50</div>
-      </div>
-      <div class="s5-order-row">
-        <div class="s5-order-item"><span class="s5-order-emoji">🍚</span><span class="s5-order-name">Chicken Biryani</span></div>
-        <div class="s5-order-price">£13.00</div>
-      </div>
-      <div class="s5-order-row">
-        <div class="s5-order-item"><span class="s5-order-emoji">🫓</span><span class="s5-order-name">Peshwari Naan</span></div>
-        <div class="s5-order-price">£3.50</div>
-      </div>
-      <div class="s5-total-row">
-        <div class="s5-total-l">Total Paid</div>
-        <div class="s5-total-r">£34.44</div>
-      </div>
-    </div>
-
-    <div class="s5-rating">
-      <div class="s5-rating-title">How was it? ⭐</div>
-      <div class="s5-rating-sub">Rate your dishes — takes 10 seconds</div>
-      <div class="stars">
-        <span class="star" onclick="rateStar(1)">⭐</span>
-        <span class="star" onclick="rateStar(2)">⭐</span>
-        <span class="star" onclick="rateStar(3)">⭐</span>
-        <span class="star" onclick="rateStar(4)">⭐</span>
-        <span class="star" onclick="rateStar(5)">⭐</span>
-      </div>
-    </div>
-
-    <div class="s5-share">
-      <button class="s5-share-btn">📲 Share</button>
-      <button class="s5-share-btn primary" onclick="showScreen(1)">🍽️ Order Again</button>
-    </div>
-  </div>
-
-  <!-- SCREEN 6: ADMIN DASHBOARD -->
-  <div class="screen" id="s6" style="overflow-y:auto;">
-    <div class="s6-header">
-      <div class="s6-greeting">Good evening, Ravi 👋</div>
-      <div class="s6-title">Revenue Dashboard</div>
-      <div class="s6-date">Thursday, 26 March 2026</div>
-    </div>
-
-    <div class="s6-hero-card">
-      <div class="s6-hero-label">Revenue Added This Month</div>
-      <div class="s6-hero-amount">£1,872</div>
-      <div class="s6-hero-uplift">↑ +18.4% vs last month</div>
-    </div>
-
-    <div class="s6-stats">
-      <div class="s6-stat up">
-        <div class="s6-stat-label">Avg Order Value</div>
-        <div class="s6-stat-val">£31.40</div>
-        <div class="s6-stat-sub">↑ from £26.60 last month</div>
-      </div>
-      <div class="s6-stat up">
-        <div class="s6-stat-label">Upsell Conversion</div>
-        <div class="s6-stat-val">34%</div>
-        <div class="s6-stat-sub">↑ from 28% last week</div>
-      </div>
-      <div class="s6-stat">
-        <div class="s6-stat-label">Orders Today</div>
-        <div class="s6-stat-val" style="color:#fff;">147</div>
-        <div class="s6-stat-sub">Lunch peak: 12--2pm</div>
-      </div>
-      <div class="s6-stat warn">
-        <div class="s6-stat-label">Items Low Stock</div>
-        <div class="s6-stat-val">3</div>
-        <div class="s6-stat-sub">Tap to review</div>
-      </div>
-    </div>
-
-    <div class="s6-chart-card">
-      <div class="s6-chart-title">Weekly Revenue (£)</div>
-      <div class="s6-chart-bars">
-        <div class="s6-bar" style="height:55%;background:rgba(200,240,77,0.3);" data-day="Mon"></div>
-        <div class="s6-bar" style="height:70%;background:rgba(200,240,77,0.4);" data-day="Tue"></div>
-        <div class="s6-bar" style="height:45%;background:rgba(200,240,77,0.3);" data-day="Wed"></div>
-        <div class="s6-bar" style="height:85%;background:rgba(200,240,77,0.5);" data-day="Thu"></div>
-        <div class="s6-bar" style="height:100%;background:var(--lime);" data-day="Fri"></div>
-        <div class="s6-bar" style="height:95%;background:rgba(200,240,77,0.8);" data-day="Sat"></div>
-        <div class="s6-bar" style="height:60%;background:rgba(200,240,77,0.35);" data-day="Sun"></div>
-      </div>
-    </div>
-
-    <div class="s6-upsell">
-      <div class="s6-upsell-title">Top Upsell Pairs <span>This week</span></div>
-      <div class="upsell-row-item">
-        <div class="upsell-row-label">🍛 Rogan Josh → 🫓 Peshwari Naan</div>
-        <div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:87%"></div></div>
-        <div class="upsell-pct">87%</div>
-      </div>
-      <div class="upsell-row-item">
-        <div class="upsell-row-label">🍚 Biryani → 🥭 Mango Lassi</div>
-        <div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:72%"></div></div>
-        <div class="upsell-pct">72%</div>
-      </div>
-      <div class="upsell-row-item">
-        <div class="upsell-row-label">🍗 Tikka → 🧅 Onion Bhaji</div>
-        <div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:58%"></div></div>
-        <div class="upsell-pct">58%</div>
-      </div>
-    </div>
-  </div>
-
-</div><!-- end phone -->
-
-  </div><!-- end phone-wrap -->
-</div><!-- end demo-stage -->
-
-
-<!-- DESIGN NOTES -->
-
-<div class="design-notes">
-  <div class="notes-title">Design System Notes</div>
-  <div class="notes-sub">Reference points for building in Figma or Framer</div>
-  <div class="notes-grid">
-    <div class="note-card">
-      <div class="note-icon">🎨</div>
-      <div class="note-heading">Colour Palette</div>
-      <div class="note-text">Midnight navy base (#0A0A14) with electric lime accent (#C8F04D). Coral for alerts (#FF5C4D), violet for upsell moments (#7B5CF5). High contrast, maximum pop.</div>
-      <div class="note-tags"><span class="note-tag">#C8F04D Lime</span><span class="note-tag">#7B5CF5 Violet</span><span class="note-tag">#FF5C4D Coral</span></div>
-    </div>
-    <div class="note-card">
-      <div class="note-icon">✍️</div>
-      <div class="note-heading">Typography</div>
-      <div class="note-text">Syne for headings — chunky, editorial, modern. DM Sans for body — clean and highly legible at small sizes. Both free on Google Fonts.</div>
-      <div class="note-tags"><span class="note-tag">Syne 800 — Headers</span><span class="note-tag">DM Sans 400/600 — Body</span></div>
-    </div>
-    <div class="note-card">
-      <div class="note-icon">⚡</div>
-      <div class="note-heading">The Upsell Moment</div>
-      <div class="note-text">Screen 3 is your sales pitch in one card. Violet border, "87% also ordered" social proof badge, single tap to add. This is the feature that closes deals — make sure it lands perfectly in demos.</div>
-      <div class="note-tags"><span class="note-tag">Social proof framing</span><span class="note-tag">One-tap add</span></div>
-    </div>
-    <div class="note-card">
-      <div class="note-icon">📐</div>
-      <div class="note-heading">Layout Rules</div>
-      <div class="note-text">18--20px border radius on cards. 16px horizontal gutters. Lime CTA buttons always full-width at bottom. Dark cards on dark background — border creates separation.</div>
-      <div class="note-tags"><span class="note-tag">18px radius</span><span class="note-tag">16px gutters</span></div>
-    </div>
-    <div class="note-card">
-      <div class="note-icon">💚</div>
-      <div class="note-heading">Gen-Z Design Cues</div>
-      <div class="note-text">No white backgrounds. Dark mode native. Emoji used functionally. Radial gradient hero images. Glassmorphism badges. Bold weight contrast between 300 and 800. Feels like Spotify meets Deliveroo.</div>
-      <div class="note-tags"><span class="note-tag">Dark native</span><span class="note-tag">Bold contrast</span><span class="note-tag">Gradients</span></div>
-    </div>
-    <div class="note-card">
-      <div class="note-icon">🛠️</div>
-      <div class="note-heading">Build in Framer</div>
-      <div class="note-text">Import this HTML to Framer as a code component, or rebuild each screen as a Framer frame. Publish to a real URL, generate a QR code, and demo on an actual phone at the restaurant table.</div>
-      <div class="note-tags"><span class="note-tag">Framer</span><span class="note-tag">Figma</span><span class="note-tag">Real QR demo</span></div>
-    </div>
-  </div>
-</div>
 
 <script>
 const labels = [
-  '', // 0 unused
+  '',
   'Screen 1 — Menu Landing',
   'Screen 2 — Item Detail',
-  'Screen 3 — Cart + Upsell ⚡ (The Money Moment)',
+  'Screen 3 — Cart + Upsell ⚡',
   'Screen 4 — Payment',
-  'Screen 5 — Order Confirmed + Rating',
-  'Screen 6 — Admin Revenue Dashboard'
+  'Screen 5 — Order Confirmed',
+  'Screen 6 — Admin Dashboard'
 ];
 
 function showScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('s' + n).classList.add('active');
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i === n-1));
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const on = i === n - 1;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  document.querySelectorAll('.flow-step').forEach((s, i) => s.classList.toggle('active', i === n - 1));
   document.getElementById('screen-label').textContent = labels[n];
 }
 
 function setMethod(el) {
-  document.querySelectorAll('.method-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.method-card').forEach(c => {
+    c.classList.remove('active');
+    c.setAttribute('aria-checked', 'false');
+  });
   el.classList.add('active');
+  el.setAttribute('aria-checked', 'true');
+}
+
+function selectSpice(el) {
+  document.querySelectorAll('.spice-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-checked', 'false');
+  });
+  el.classList.add('active');
+  el.setAttribute('aria-checked', 'true');
+}
+
+function toggleFilter(el) {
+  document.querySelectorAll('.s1-filter').forEach(f => f.classList.remove('on'));
+  el.classList.add('on');
+
+  const label = el.textContent.trim();
+  const list  = document.getElementById('menu-list');
+  const cards = Array.from(list.querySelectorAll('.item-card'));
+
+  // Reset visibility
+  cards.forEach(c => { c.classList.remove('hidden'); c.style.order = ''; });
+
+  if (label.includes('Chef')) {
+    cards.forEach(c => { if (!c.dataset.tags.includes('chef')) c.classList.add('hidden'); });
+  } else if (label.includes('Veg')) {
+    cards.forEach(c => { if (!c.dataset.tags.includes('veg'))  c.classList.add('hidden'); });
+  } else if (label.includes('Trending')) {
+    cards.forEach(c => { if (!c.dataset.tags.includes('trending')) c.classList.add('hidden'); });
+  } else if (label.includes('Low')) {
+    cards.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price))
+         .forEach((c, i) => { c.style.order = i; });
+    list.style.display = 'flex'; // re-trigger flex order
+  }
+}
+
+let qty = 1;
+function changeQty(delta) {
+  qty = Math.max(1, qty + delta);
+  const el = document.getElementById('qty-display');
+  el.textContent = qty;
+  el.setAttribute('aria-label', 'Quantity: ' + qty);
+}
+
+function toggleFav(btn) {
+  const isPressed = btn.getAttribute('aria-pressed') === 'true';
+  btn.setAttribute('aria-pressed', String(!isPressed));
+  btn.textContent = isPressed ? '🤍' : '❤️';
+  btn.setAttribute('aria-label', isPressed ? 'Save to favourites' : 'Saved to favourites');
 }
 
 function rateStar(n) {
-  const stars = document.querySelectorAll('.star');
-  stars.forEach((s, i) => {
+  document.querySelectorAll('.star').forEach((s, i) => {
     s.textContent = i < n ? '⭐' : '☆';
     s.style.transform = i < n ? 'scale(1.1)' : 'scale(1)';
+    s.setAttribute('aria-label', (i + 1) + ' star' + (i > 0 ? 's' : '') + (i < n ? ' — selected' : ''));
   });
   setTimeout(() => {
-    document.querySelector('.s5-rating').innerHTML = '<div class="s5-rating-title">Thanks! 🙏</div><div class="s5-rating-sub" style="color:#34D399">Your review helps the kitchen improve.</div>';
+    const el = document.querySelector('.s5-rating');
+    if (el) el.innerHTML = '<div class="s5-rating-title">Thanks! 🙏</div><p class="s5-rating-sub" style="color:#34D399">Your review helps the kitchen improve.</p>';
   }, 600);
 }
 
-// Spice button toggle
-document.querySelectorAll('.spice-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.spice-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  });
-});
+/* ── THEME TOGGLE ── */
+const themeBtn = document.getElementById('theme-btn');
+const root = document.documentElement;
 
-// Filter toggle
-document.querySelectorAll('.s1-filter').forEach(f => {
-  f.addEventListener('click', () => {
-    document.querySelectorAll('.s1-filter').forEach(x => x.classList.remove('on'));
-    f.classList.add('on');
-  });
+function applyTheme(theme) {
+  root.setAttribute('data-theme', theme);
+  const isLight = theme === 'light';
+  themeBtn.textContent = isLight ? '🌙' : '☀️';
+  themeBtn.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+  themeBtn.setAttribute('aria-pressed', String(isLight));
+  try { localStorage.setItem('tt-theme', theme); } catch(e) {}
+}
+
+// Load saved preference or respect OS setting
+const saved = (() => { try { return localStorage.getItem('tt-theme'); } catch(e) { return null; } })();
+if (saved) {
+  applyTheme(saved);
+} else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+  applyTheme('light');
+}
+
+themeBtn.addEventListener('click', () => {
+  applyTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
 });
 </script>
-
 </body>
 </html>
