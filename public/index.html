@@ -222,11 +222,9 @@ body {
 .s1-hero { position:relative; height:220px; flex-shrink:0; overflow:hidden; }
 .s1-hero-img-inner {
   width:100%; height:100%;
-  background:
-    radial-gradient(circle at 30% 40%, rgba(245,158,11,0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(239,68,68,0.25) 0%, transparent 45%),
-    radial-gradient(circle at 60% 20%, rgba(139,92,246,0.3) 0%, transparent 40%);
-  display:flex; align-items:center; justify-content:center; font-size:80px;
+  background-image: url('/images/restaurant-banner.jpg');
+  background-size: cover;
+  background-position: center;
 }
 .s1-hero-overlay {
   position:absolute; inset:0;
@@ -738,7 +736,7 @@ body {
         <!-- SCREEN 1: MENU -->
         <div class="screen active" id="s1" role="tabpanel" aria-labelledby="tab-1">
           <div class="s1-hero" aria-hidden="true">
-            <div class="s1-hero-img-inner">🍛</div>
+            <div class="s1-hero-img-inner"></div>
             <div class="s1-hero-overlay"></div>
             <div class="s1-table-badge">Table 7</div>
             <div class="s1-restaurant-name">
