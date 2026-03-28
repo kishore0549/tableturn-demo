@@ -290,10 +290,12 @@ body {
   display:flex; align-items:center; justify-content:center; font-size:38px;
   box-shadow:inset 0 -4px 12px rgba(0,0,0,0.3);
 }
-.item-img.curry  { background:linear-gradient(145deg,#3a1f08,#5c3010); }
-.item-img.bread  { background:linear-gradient(145deg,#2a2208,#4a3c10); }
-.item-img.drink  { background:linear-gradient(145deg,#0a2030,#0a3545); }
-.item-img.biryani{ background:linear-gradient(145deg,#2a0f0f,#4a1c10); }
+.item-img.curry   { background:linear-gradient(145deg,#3a1f08,#5c3010); }
+.item-img.bread   { background:linear-gradient(145deg,#2a2208,#4a3c10); }
+.item-img.drink   { background:linear-gradient(145deg,#0a2030,#0a3545); }
+.item-img.biryani { background:linear-gradient(145deg,#2a0f0f,#4a1c10); }
+.item-img.burger  { background:linear-gradient(145deg,#1a0e04,#3a1e08); }
+.item-img.mocktail{ background:linear-gradient(145deg,#06140a,#0e2a14); }
 
 .item-info {
   flex:1; min-width:0;
@@ -796,6 +798,26 @@ body {
               </div>
               <button type="button" class="item-add" aria-label="Add Mango Lassi to cart" onclick="event.stopPropagation();quickAdd('mango-lassi',this)">+</button>
             </li>
+            <li class="item-card" data-tags="trending" data-price="11.50" tabindex="0" role="button" aria-label="Spiced Lamb Burger £11.50 — tap to view details" onclick="openDetail('burger')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('burger')}">
+              <div class="item-img burger" aria-hidden="true"><img src="/images/burger.jpg" alt="Spiced Lamb Burger"></div>
+              <div class="item-info">
+                <div class="item-name">Spiced Lamb Burger</div>
+                <div class="item-desc">Harissa-spiced patty, brioche bun, mint raita</div>
+                <div class="item-tags"><span class="tag spice">🌶 Medium</span></div>
+                <div class="item-meta"><span class="item-price">£11.50</span><span class="item-rating">⭐ 4.6 (87)</span></div>
+              </div>
+              <button type="button" class="item-add" aria-label="Add Spiced Lamb Burger to cart" onclick="event.stopPropagation();quickAdd('burger',this)">+</button>
+            </li>
+            <li class="item-card" data-tags="veg" data-price="5.50" tabindex="0" role="button" aria-label="Passion Fruit Mocktail £5.50 — tap to view details" onclick="openDetail('mocktail')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('mocktail')}">
+              <div class="item-img mocktail" aria-hidden="true"><img src="/images/mocktail.jpg" alt="Passion Fruit Mocktail"></div>
+              <div class="item-info">
+                <div class="item-name">Passion Fruit Mocktail</div>
+                <div class="item-desc">Passionfruit, mint, ginger, soda — alcohol free</div>
+                <div class="item-tags"><span class="tag veg">🌿 Veg</span></div>
+                <div class="item-meta"><span class="item-price">£5.50</span><span class="item-rating">⭐ 4.8 (203)</span></div>
+              </div>
+              <button type="button" class="item-add" aria-label="Add Passion Fruit Mocktail to cart" onclick="event.stopPropagation();quickAdd('mocktail',this)">+</button>
+            </li>
           </ul>
 
           <button type="button" class="cart-bar" onclick="showScreen(3)" aria-label="View cart" style="display:none">
@@ -863,18 +885,7 @@ body {
             <li id="cart-empty" class="cart-empty-state" style="display:none;">🛒 Your cart is empty — add something delicious!</li>
           </ul>
 
-          <div class="upsell-card" id="upsell-card" role="complementary" aria-label="Suggested item: Peshwari Naan">
-            <div class="upsell-badge">🧠 87% also ordered</div>
-            <div class="upsell-row">
-              <div class="upsell-emoji" aria-hidden="true"><img src="/images/peshawari-naan.png" alt="Peshwari Naan"></div>
-              <div class="upsell-info">
-                <div class="upsell-text">Perfect with Lamb Rogan Josh</div>
-                <div class="upsell-name">Peshwari Naan</div>
-                <div class="upsell-price">+ £3.50</div>
-              </div>
-              <button type="button" class="upsell-add" aria-label="Add Peshwari Naan" aria-pressed="false" onclick="addToCart('peshwari-naan');renderUpsell()">Add</button>
-            </div>
-          </div>
+          <div class="upsell-card" id="upsell-card" role="complementary" style="display:none;"></div>
 
           <div class="s3-promo">
             <div class="promo-icon" aria-hidden="true">🏷️</div>
@@ -1013,7 +1024,7 @@ body {
             <div class="s6-upsell-title">Top Upsell Pairs <span>This week</span></div>
             <div class="upsell-row-item"><div class="upsell-row-label">🍛 Rogan Josh → 🫓 Peshwari Naan</div><div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:87%"></div></div><div class="upsell-pct">87%</div></div>
             <div class="upsell-row-item"><div class="upsell-row-label">🍚 Biryani → 🥭 Mango Lassi</div><div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:72%"></div></div><div class="upsell-pct">72%</div></div>
-            <div class="upsell-row-item"><div class="upsell-row-label">🍗 Tikka → 🧅 Onion Bhaji</div><div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:58%"></div></div><div class="upsell-pct">58%</div></div>
+            <div class="upsell-row-item"><div class="upsell-row-label">🍔 Burger → 🍹 Mocktail</div><div class="upsell-bar-wrap"><div class="upsell-bar-fill" style="width:79%"></div></div><div class="upsell-pct">79%</div></div>
           </div>
         </div>
 
@@ -1083,8 +1094,8 @@ const MENU = [
     id: 'mango-lassi',
     name: 'Mango Lassi',
     price: 4.00,
-    img: '/images/mango-lassi.jpg',
-    imgDetail: '/images/mango-lassi.jpg',
+    img: '/images/mango-lassi.png',
+    imgDetail: '/images/mango-lassi.png',
     desc: 'Fresh Alphonso mango, thick yoghurt',
     descLong: 'Blended fresh Alphonso mango with thick strained yoghurt and a pinch of cardamom. Naturally sweet, refreshing and dairy-rich.',
     badge: '🌿 Vegetarian',
@@ -1092,7 +1103,45 @@ const MENU = [
     rating: '4.9', reviews: '445',
     allergens: 'Contains dairy (yoghurt). Free from: nuts, gluten. Always inform your server of any allergies.',
     spiceDefault: -1
+  },
+  {
+    id: 'burger',
+    name: 'Spiced Lamb Burger',
+    price: 11.50,
+    img: '/images/burger.jpg',
+    imgDetail: '/images/burger.jpg',
+    desc: 'Harissa-spiced patty, brioche bun, mint raita',
+    descLong: 'A hand-pressed lamb patty marinated in harissa and cumin, served in a toasted brioche bun with caramelised onions, aged cheddar and house mint raita.',
+    badge: '🔥 Trending This Week',
+    tagLabels: ['🌶 Medium Heat'],
+    rating: '4.6', reviews: '87',
+    allergens: 'Contains: gluten (bun), dairy (cheese, raita), sesame. Free from: tree nuts.',
+    spiceDefault: 1
+  },
+  {
+    id: 'mocktail',
+    name: 'Passion Fruit Mocktail',
+    price: 5.50,
+    img: '/images/mocktail.jpg',
+    imgDetail: '/images/mocktail.jpg',
+    desc: 'Passionfruit, mint, ginger, soda — alcohol free',
+    descLong: 'Fresh passionfruit muddled with mint, a squeeze of lime, house-made ginger syrup and sparkling soda. Vibrant, refreshing and completely alcohol-free.',
+    badge: '🌿 Alcohol Free',
+    tagLabels: ['🌿 Veg', '🍹 Alcohol Free'],
+    rating: '4.8', reviews: '203',
+    allergens: 'Free from: dairy, nuts, gluten. May contain traces of sulphites.',
+    spiceDefault: -1
   }
+];
+
+/* ── UPSELL RULES (trigger → suggest) ── */
+const UPSELL_RULES = [
+  { trigger: 'rogan-josh',      suggest: 'peshwari-naan',    pct: '87', label: 'Perfect with Lamb Rogan Josh' },
+  { trigger: 'peshwari-naan',   suggest: 'rogan-josh',       pct: '87', label: 'Pairs perfectly with Peshwari Naan' },
+  { trigger: 'chicken-biryani', suggest: 'mango-lassi',      pct: '72', label: 'Most popular with Chicken Biryani' },
+  { trigger: 'mango-lassi',     suggest: 'chicken-biryani',  pct: '72', label: 'Guests who order this love Biryani' },
+  { trigger: 'burger',          suggest: 'mocktail',         pct: '79', label: 'Perfect pairing with the Burger' },
+  { trigger: 'mocktail',        suggest: 'burger',           pct: '79', label: 'Popular alongside our Mocktails' },
 ];
 
 const SERVICE_RATE = 0.125;
@@ -1205,20 +1254,37 @@ function renderCart() {
 function renderUpsell() {
   const card = document.getElementById('upsell-card');
   if (!card) return;
-  const btn = card.querySelector('.upsell-add');
-  if (!btn) return;
-  const inCart = cart.find(function(c) { return c.id === 'peshwari-naan'; });
-  if (inCart) {
-    btn.textContent = '✓ Added';
-    btn.style.background = '#10B981';
-    btn.disabled = true;
-    btn.setAttribute('aria-pressed', 'true');
-  } else {
-    btn.textContent = 'Add';
-    btn.style.background = '';
-    btn.disabled = false;
-    btn.setAttribute('aria-pressed', 'false');
+  const cartIds = cart.map(function(c) { return c.id; });
+
+  // Find first rule where trigger is in cart and suggest is not yet in cart
+  var match = null;
+  for (var i = 0; i < UPSELL_RULES.length; i++) {
+    var rule = UPSELL_RULES[i];
+    if (cartIds.indexOf(rule.trigger) !== -1 && cartIds.indexOf(rule.suggest) === -1) {
+      match = rule;
+      break;
+    }
   }
+
+  if (!match) { card.style.display = 'none'; card.innerHTML = ''; return; }
+
+  const item = MENU.find(function(m) { return m.id === match.suggest; });
+  if (!item) { card.style.display = 'none'; return; }
+
+  card.style.display = '';
+  card.setAttribute('aria-label', 'Suggested item: ' + item.name);
+  card.innerHTML =
+    '<div class="upsell-badge">🧠 ' + match.pct + '% also ordered</div>' +
+    '<div class="upsell-row">' +
+      '<div class="upsell-emoji" aria-hidden="true"><img src="' + item.img + '" alt="' + item.name + '"></div>' +
+      '<div class="upsell-info">' +
+        '<div class="upsell-text">' + match.label + '</div>' +
+        '<div class="upsell-name">' + item.name + '</div>' +
+        '<div class="upsell-price">+ £' + item.price.toFixed(2) + '</div>' +
+      '</div>' +
+      '<button type="button" class="upsell-add" aria-label="Add ' + item.name + '" aria-pressed="false" ' +
+        'onclick="addToCart(\'' + item.id + '\');renderUpsell()">Add</button>' +
+    '</div>';
 }
 
 function renderCartBar() {
