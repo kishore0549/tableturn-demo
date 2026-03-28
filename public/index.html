@@ -685,6 +685,7 @@ body {
 
 ::-webkit-scrollbar { display:none; }
 .phone { overflow:hidden; }
+.cart-empty-state { text-align:center; padding:32px 16px; color:var(--muted); font-size:14px; list-style:none; }
 </style>
 </head>
 <body>
@@ -755,7 +756,7 @@ body {
           <div class="s1-section-title">Chef's Specials</div>
 
           <ul class="s1-items" id="menu-list" aria-label="Menu items">
-            <li class="item-card" data-tags="chef,spicy" data-price="14.50" tabindex="0" role="button" aria-label="Lamb Rogan Josh £14.50 — tap to view details" onclick="showScreen(2)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScreen(2)}">
+            <li class="item-card" data-tags="chef,spicy" data-price="14.50" tabindex="0" role="button" aria-label="Lamb Rogan Josh £14.50 — tap to view details" onclick="openDetail('rogan-josh')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('rogan-josh')}">
               <div class="item-img curry" aria-hidden="true"><img src="/images/lamb-rogan-josh.jpg" alt="Lamb Rogan Josh dish"></div>
               <div class="item-info">
                 <div class="item-name">Lamb Rogan Josh</div>
@@ -763,9 +764,9 @@ body {
                 <div class="item-tags"><span class="tag chef">⭐ Chef's Pick</span><span class="tag spice">🌶 Medium</span></div>
                 <div class="item-meta"><span class="item-price">£14.50</span><span class="item-rating">⭐ 4.9 (312)</span></div>
               </div>
-              <button type="button" class="item-add" aria-label="Add Lamb Rogan Josh to cart" onclick="event.stopPropagation();showScreen(3)">+</button>
+              <button type="button" class="item-add" aria-label="Add Lamb Rogan Josh to cart" onclick="event.stopPropagation();quickAdd('rogan-josh',this)">+</button>
             </li>
-            <li class="item-card" data-tags="trending" data-price="13.00" tabindex="0" role="button" aria-label="Chicken Biryani £13.00 — add to cart" onclick="showScreen(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScreen(3)}">
+            <li class="item-card" data-tags="trending" data-price="13.00" tabindex="0" role="button" aria-label="Chicken Biryani £13.00 — tap to view details" onclick="openDetail('chicken-biryani')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('chicken-biryani')}">
               <div class="item-img biryani" aria-hidden="true"><img src="/images/chicken-biryani.jpg" alt="Chicken Biryani dish"></div>
               <div class="item-info">
                 <div class="item-name">Chicken Biryani</div>
@@ -773,9 +774,9 @@ body {
                 <div class="item-tags"><span class="tag spice">🌶 Mild</span></div>
                 <div class="item-meta"><span class="item-price">£13.00</span><span class="item-rating">⭐ 4.7 (198)</span></div>
               </div>
-              <button type="button" class="item-add" aria-label="Add Chicken Biryani to cart" onclick="event.stopPropagation();showScreen(3)">+</button>
+              <button type="button" class="item-add" aria-label="Add Chicken Biryani to cart" onclick="event.stopPropagation();quickAdd('chicken-biryani',this)">+</button>
             </li>
-            <li class="item-card" data-tags="veg,trending" data-price="3.50" tabindex="0" role="button" aria-label="Peshwari Naan £3.50 — add to cart" onclick="showScreen(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScreen(3)}">
+            <li class="item-card" data-tags="veg,trending" data-price="3.50" tabindex="0" role="button" aria-label="Peshwari Naan £3.50 — tap to view details" onclick="openDetail('peshwari-naan')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('peshwari-naan')}">
               <div class="item-img bread" aria-hidden="true"><img src="/images/peshawari-naan.png" alt="Peshwari Naan bread"></div>
               <div class="item-info">
                 <div class="item-name">Peshwari Naan</div>
@@ -783,60 +784,60 @@ body {
                 <div class="item-tags"><span class="tag veg">🌿 Veg</span></div>
                 <div class="item-meta"><span class="item-price">£3.50</span><span class="item-rating">⭐ 4.8 (521)</span></div>
               </div>
-              <button type="button" class="item-add" aria-label="Add Peshwari Naan to cart" onclick="event.stopPropagation();showScreen(3)">+</button>
+              <button type="button" class="item-add" aria-label="Add Peshwari Naan to cart" onclick="event.stopPropagation();quickAdd('peshwari-naan',this)">+</button>
             </li>
-            <li class="item-card" data-tags="veg,trending" data-price="4.00" tabindex="0" role="button" aria-label="Mango Lassi £4.00 — add to cart" onclick="showScreen(3)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showScreen(3)}">
-              <div class="item-img drink" aria-hidden="true"><img src="/images/mango-lassi.jpg" alt="Mango Lassi"></div>
+            <li class="item-card" data-tags="veg,trending" data-price="4.00" tabindex="0" role="button" aria-label="Mango Lassi £4.00 — tap to view details" onclick="openDetail('mango-lassi')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDetail('mango-lassi')}">
+              <div class="item-img drink" aria-hidden="true"><img src="/images/mango-lassi.png" alt="Mango Lassi"></div>
               <div class="item-info">
                 <div class="item-name">Mango Lassi</div>
                 <div class="item-desc">Fresh Alphonso mango, thick yoghurt</div>
                 <div class="item-tags"><span class="tag veg">🌿 Veg</span></div>
                 <div class="item-meta"><span class="item-price">£4.00</span><span class="item-rating">⭐ 4.9 (445)</span></div>
               </div>
-              <button type="button" class="item-add" aria-label="Add Mango Lassi to cart" onclick="event.stopPropagation();showScreen(3)">+</button>
+              <button type="button" class="item-add" aria-label="Add Mango Lassi to cart" onclick="event.stopPropagation();quickAdd('mango-lassi',this)">+</button>
             </li>
           </ul>
 
-          <button type="button" class="cart-bar" onclick="showScreen(3)" aria-label="View cart — 2 items, total £27.50">
+          <button type="button" class="cart-bar" onclick="showScreen(3)" aria-label="View cart" style="display:none">
             <div class="cart-bar-left">
-              <div class="cart-count" aria-hidden="true">2</div>
+              <div class="cart-count" aria-hidden="true">0</div>
               <div class="cart-bar-text">View Cart</div>
             </div>
-            <div class="cart-bar-price">£27.50</div>
+            <div class="cart-bar-price">£0.00</div>
           </button>
         </div>
 
         <!-- SCREEN 2: ITEM DETAIL -->
         <div class="screen" id="s2" role="tabpanel" aria-labelledby="tab-2">
-          <div class="s2-img" aria-hidden="true">
-            <img src="/images/rogan-josh.jpg" alt="Lamb Rogan Josh dish">
+          <div class="s2-img" id="s2-hero-img-wrap" aria-hidden="true">
+            <img id="s2-detail-img" src="/images/rogan-josh.jpg" alt="Lamb Rogan Josh dish">
             <div class="s2-img-glow"></div>
           </div>
           <button type="button" class="s2-back" onclick="showScreen(1)" aria-label="Back to menu">←</button>
           <button type="button" class="s2-fav"  aria-label="Save to favourites" aria-pressed="false" onclick="toggleFav(this)">🤍</button>
 
           <div class="s2-content">
-            <div class="s2-chef-badge">⭐ Chef's Special This Week</div>
-            <h2 class="s2-name">Lamb Rogan Josh</h2>
+            <div class="s2-chef-badge" id="s2-badge">⭐ Chef's Special This Week</div>
+            <h2 class="s2-name" id="s2-name">Lamb Rogan Josh</h2>
             <div class="s2-meta">
-              <div class="s2-price">£14.50</div>
-              <div class="s2-stars">⭐ 4.9 · 312 ratings</div>
+              <div class="s2-price" id="s2-price">£14.50</div>
+              <div class="s2-stars" id="s2-stars">⭐ 4.9 · 312 ratings</div>
             </div>
-            <p class="s2-desc">Our signature slow-cooked lamb in a rich, aromatic Kashmiri sauce. Simmered for 6 hours with whole spices, dried chillies and a touch of yoghurt. Best paired with our Peshwari Naan.</p>
-            <div class="s2-tags">
+            <p class="s2-desc" id="s2-desc">Our signature slow-cooked lamb in a rich, aromatic Kashmiri sauce. Simmered for 6 hours with whole spices, dried chillies and a touch of yoghurt. Best paired with our Peshwari Naan.</p>
+            <div class="s2-tags" id="s2-tags">
               <span class="tag spice">🌶 Medium Heat</span>
               <span class="tag chef">Gluten Free</span>
             </div>
 
             <div class="s2-section" id="spice-group-label">Spice Level</div>
-            <div class="s2-spice" role="radiogroup" aria-labelledby="spice-group-label">
+            <div class="s2-spice" id="s2-spice-wrap" role="radiogroup" aria-labelledby="spice-group-label">
               <button type="button" class="spice-btn" role="radio" aria-checked="false" onclick="selectSpice(this)"><span class="chilli-row">🌶</span><span>Mild</span></button>
               <button type="button" class="spice-btn active" role="radio" aria-checked="true" onclick="selectSpice(this)"><span class="chilli-row">🌶🌶</span><span>Medium</span></button>
               <button type="button" class="spice-btn" role="radio" aria-checked="false" onclick="selectSpice(this)"><span class="chilli-row">🌶🌶🌶</span><span>Hot</span></button>
               <button type="button" class="spice-btn" role="radio" aria-checked="false" onclick="selectSpice(this)"><span class="chilli-row">🌶🌶🌶🌶</span><span>Extra</span></button>
             </div>
 
-            <div class="s2-allergens" role="note" aria-label="Allergen information">
+            <div class="s2-allergens" id="s2-allergens" role="note" aria-label="Allergen information">
               <strong style="color:#fff;font-size:12px;">⚠️ Allergens:</strong> Contains dairy (yoghurt). Free from: nuts, gluten, eggs. Always inform your server of any allergies.
             </div>
           </div>
@@ -847,7 +848,7 @@ body {
               <div class="qty-num" id="qty-display" aria-live="polite">1</div>
               <button type="button" class="qty-btn" aria-label="Increase quantity" onclick="changeQty(1)">+</button>
             </div>
-            <button type="button" class="s2-add-btn" onclick="showScreen(3)" aria-label="Add 1 Lamb Rogan Josh to cart for £14.50">Add to Cart · £14.50</button>
+            <button type="button" class="s2-add-btn" id="s2-add-btn" onclick="addDetailToCart()" aria-label="Add 1 Lamb Rogan Josh to cart for £14.50">Add to Cart · £14.50</button>
           </div>
         </div>
 
@@ -858,34 +859,11 @@ body {
             <button type="button" class="s3-edit" onclick="showScreen(1)" aria-label="Add more items">+ Add more</button>
           </div>
 
-          <ul class="s3-items" aria-label="Items in cart">
-            <li class="cart-item">
-              <div class="cart-item-emoji" aria-hidden="true"><img src="/images/lamb-rogan-josh.jpg" alt="Lamb Rogan Josh"></div>
-              <div class="cart-item-info">
-                <div class="cart-item-name">Lamb Rogan Josh</div>
-                <div class="cart-item-sub">Medium heat · x1</div>
-              </div>
-              <div class="cart-item-price">£14.50</div>
-            </li>
-            <li class="cart-item">
-              <div class="cart-item-emoji" aria-hidden="true"><img src="/images/chicken-biryani.jpg" alt="Chicken Biryani"></div>
-              <div class="cart-item-info">
-                <div class="cart-item-name">Chicken Biryani</div>
-                <div class="cart-item-sub">Mild · x1</div>
-              </div>
-              <div class="cart-item-price">£13.00</div>
-            </li>
-            <li class="cart-item">
-              <div class="cart-item-emoji" aria-hidden="true"><img src="/images/peshawari-naan.png" alt="Peshwari Naan"></div>
-              <div class="cart-item-info">
-                <div class="cart-item-name">Peshwari Naan</div>
-                <div class="cart-item-sub">Upsell added · x1</div>
-              </div>
-              <div class="cart-item-price">£3.50</div>
-            </li>
+          <ul class="s3-items" id="cart-items-list" aria-label="Items in cart">
+            <li id="cart-empty" class="cart-empty-state" style="display:none;">🛒 Your cart is empty — add something delicious!</li>
           </ul>
 
-          <div class="upsell-card" role="complementary" aria-label="Suggested item: Peshwari Naan">
+          <div class="upsell-card" id="upsell-card" role="complementary" aria-label="Suggested item: Peshwari Naan">
             <div class="upsell-badge">🧠 87% also ordered</div>
             <div class="upsell-row">
               <div class="upsell-emoji" aria-hidden="true"><img src="/images/peshawari-naan.png" alt="Peshwari Naan"></div>
@@ -894,7 +872,7 @@ body {
                 <div class="upsell-name">Peshwari Naan</div>
                 <div class="upsell-price">+ £3.50</div>
               </div>
-              <button type="button" class="upsell-add" aria-label="Peshwari Naan added" aria-pressed="true" disabled style="background:#10B981;">✓ Added</button>
+              <button type="button" class="upsell-add" aria-label="Add Peshwari Naan" aria-pressed="false" onclick="addToCart('peshwari-naan');renderUpsell()">Add</button>
             </div>
           </div>
 
@@ -907,14 +885,14 @@ body {
           </div>
 
           <div class="s3-summary" aria-label="Order total breakdown">
-            <div class="summary-row"><div class="summary-label">Subtotal</div><div class="summary-val">£31.00</div></div>
-            <div class="summary-row"><div class="summary-label">Service charge (12.5%)</div><div class="summary-val">£3.88</div></div>
+            <div class="summary-row"><div class="summary-label">Subtotal</div><div class="summary-val" id="cart-subtotal">£0.00</div></div>
+            <div class="summary-row"><div class="summary-label">Service charge (12.5%)</div><div class="summary-val" id="cart-service">£0.00</div></div>
             <div class="summary-row"><div class="summary-label" style="color:#34D399;">Promo discount</div><div class="summary-val" style="color:#34D399;">−£0.00</div></div>
             <div class="summary-divider" role="separator"></div>
-            <div class="summary-row summary-total"><div class="summary-label">Total</div><div class="summary-val">£34.88</div></div>
+            <div class="summary-row summary-total"><div class="summary-label">Total</div><div class="summary-val" id="cart-total">£0.00</div></div>
           </div>
 
-          <button type="button" class="s3-pay-btn" onclick="showScreen(4)" aria-label="Proceed to payment — total £34.88">
+          <button type="button" class="s3-pay-btn" id="cart-pay-btn" onclick="showScreen(4)" aria-label="Cart is empty">
             <span class="pay-icon" aria-hidden="true">💳</span> Proceed to Pay
           </button>
         </div>
@@ -930,7 +908,7 @@ body {
           <div class="s4-total-card">
             <div>
               <div class="s4-total-label">Total Due</div>
-              <div class="s4-total-amount" aria-label="£34.88">£34.88</div>
+              <div class="s4-total-amount" id="s4-total-amount" aria-label="£0.00">£0.00</div>
             </div>
             <div class="s4-total-icon" aria-hidden="true">🔒</div>
           </div>
@@ -965,8 +943,8 @@ body {
 
           <div class="s4-security">🔒 256-bit SSL · PCI DSS compliant</div>
 
-          <button type="button" class="s4-pay-btn" onclick="showScreen(5)" aria-label="Pay £34.88 securely now">
-            Pay £34.88 →
+          <button type="button" class="s4-pay-btn" id="s4-pay-btn" onclick="showScreen(5)" aria-label="Pay £0.00 securely now">
+            Pay £0.00 →
           </button>
         </div>
 
@@ -979,10 +957,8 @@ body {
 
           <div class="s5-order-card">
             <div class="s5-order-title">Order Summary</div>
-            <div class="s5-order-row"><div class="s5-order-item"><span class="s5-order-emoji" aria-hidden="true"><img src="/images/lamb-rogan-josh.jpg" alt=""></span><span class="s5-order-name">Lamb Rogan Josh</span></div><div class="s5-order-price">£14.50</div></div>
-            <div class="s5-order-row"><div class="s5-order-item"><span class="s5-order-emoji" aria-hidden="true"><img src="/images/chicken-biryani.jpg" alt=""></span><span class="s5-order-name">Chicken Biryani</span></div><div class="s5-order-price">£13.00</div></div>
-            <div class="s5-order-row"><div class="s5-order-item"><span class="s5-order-emoji" aria-hidden="true"><img src="/images/peshawari-naan.png" alt=""></span><span class="s5-order-name">Peshwari Naan</span></div><div class="s5-order-price">£3.50</div></div>
-            <div class="s5-total-row"><div class="s5-total-l">Total Paid</div><div class="s5-total-r">£34.88</div></div>
+            <div id="s5-order-rows"></div>
+            <div class="s5-total-row"><div class="s5-total-l">Total Paid</div><div class="s5-total-r" id="s5-total-paid">£0.00</div></div>
           </div>
 
           <div class="s5-rating">
@@ -1048,6 +1024,7 @@ body {
 
 
 <script>
+/* ── SCREEN LABELS ── */
 const labels = [
   '',
   'Screen 1 — Menu Landing',
@@ -1058,6 +1035,72 @@ const labels = [
   'Screen 6 — Admin Dashboard'
 ];
 
+/* ── MENU DATA ── */
+const MENU = [
+  {
+    id: 'rogan-josh',
+    name: 'Lamb Rogan Josh',
+    price: 14.50,
+    img: '/images/lamb-rogan-josh.jpg',
+    imgDetail: '/images/rogan-josh.jpg',
+    desc: 'Slow-cooked, aromatic spices, tender lamb',
+    descLong: 'Our signature slow-cooked lamb in a rich, aromatic Kashmiri sauce. Simmered for 6 hours with whole spices, dried chillies and a touch of yoghurt. Best paired with our Peshwari Naan.',
+    badge: '⭐ Chef\'s Special This Week',
+    tagLabels: ['🌶 Medium Heat', 'Gluten Free'],
+    rating: '4.9', reviews: '312',
+    allergens: 'Contains dairy (yoghurt). Free from: nuts, gluten, eggs. Always inform your server of any allergies.',
+    spiceDefault: 1
+  },
+  {
+    id: 'chicken-biryani',
+    name: 'Chicken Biryani',
+    price: 13.00,
+    img: '/images/chicken-biryani.jpg',
+    imgDetail: '/images/chicken-biryani.jpg',
+    desc: 'Fragrant basmati, saffron, raita included',
+    descLong: 'Slow-cooked chicken layered with fragrant basmati rice, saffron, crispy onions and fresh herbs. Served with cooling raita and pickle on the side.',
+    badge: '🔥 Trending This Week',
+    tagLabels: ['🌶 Mild'],
+    rating: '4.7', reviews: '198',
+    allergens: 'Contains dairy (raita). Free from: nuts, gluten. Always inform your server of any allergies.',
+    spiceDefault: 0
+  },
+  {
+    id: 'peshwari-naan',
+    name: 'Peshwari Naan',
+    price: 3.50,
+    img: '/images/peshawari-naan.png',
+    imgDetail: '/images/peshawari-naan.png',
+    desc: 'Coconut, almond, light brush of ghee',
+    descLong: 'Freshly baked naan filled with desiccated coconut, ground almonds and sultanas. Brushed with clarified butter straight from the tandoor for a golden finish.',
+    badge: '🌿 Vegetarian',
+    tagLabels: ['🌿 Veg', '🥜 Contains Nuts'],
+    rating: '4.8', reviews: '521',
+    allergens: 'Contains: tree nuts (almonds), dairy (ghee), gluten. Vegan option available on request.',
+    spiceDefault: -1
+  },
+  {
+    id: 'mango-lassi',
+    name: 'Mango Lassi',
+    price: 4.00,
+    img: '/images/mango-lassi.jpg',
+    imgDetail: '/images/mango-lassi.jpg',
+    desc: 'Fresh Alphonso mango, thick yoghurt',
+    descLong: 'Blended fresh Alphonso mango with thick strained yoghurt and a pinch of cardamom. Naturally sweet, refreshing and dairy-rich.',
+    badge: '🌿 Vegetarian',
+    tagLabels: ['🌿 Veg', '🥭 Seasonal'],
+    rating: '4.9', reviews: '445',
+    allergens: 'Contains dairy (yoghurt). Free from: nuts, gluten. Always inform your server of any allergies.',
+    spiceDefault: -1
+  }
+];
+
+const SERVICE_RATE = 0.125;
+let cart = [];
+let currentDetailId = null;
+let qty = 1;
+
+/* ── SCREEN NAVIGATION ── */
 function showScreen(n) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('s' + n).classList.add('active');
@@ -1068,10 +1111,220 @@ function showScreen(n) {
   });
   document.querySelectorAll('.flow-step').forEach((s, i) => s.classList.toggle('active', i === n - 1));
   document.getElementById('screen-label').textContent = labels[n];
+  if (n === 5) renderConfirmation();
 }
 
+/* ── CART ENGINE ── */
+function addToCart(id, quantity) {
+  quantity = quantity || 1;
+  const item = MENU.find(function(m) { return m.id === id; });
+  if (!item) return;
+  const existing = cart.find(function(c) { return c.id === id; });
+  if (existing) {
+    existing.qty += quantity;
+  } else {
+    cart.push({ id: item.id, name: item.name, price: item.price, img: item.img, qty: quantity });
+  }
+  renderCart();
+  renderCartBar();
+}
+
+function quickAdd(id, btn) {
+  addToCart(id, 1);
+  // Visual feedback on + button
+  const orig = btn.textContent;
+  btn.textContent = '✓';
+  btn.style.background = '#10B981';
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.style.background = '';
+  }, 800);
+}
+
+function renderCart() {
+  const listEl = document.getElementById('cart-items-list');
+  const emptyEl = document.getElementById('cart-empty');
+  const subtotalEl = document.getElementById('cart-subtotal');
+  const serviceEl  = document.getElementById('cart-service');
+  const totalEl    = document.getElementById('cart-total');
+  const payBtn     = document.getElementById('cart-pay-btn');
+
+  if (cart.length === 0) {
+    // Remove all real cart items, show empty state
+    Array.from(listEl.children).forEach(function(li) {
+      if (li.id !== 'cart-empty') li.remove();
+    });
+    if (emptyEl) emptyEl.style.display = 'block';
+    subtotalEl.textContent = '£0.00';
+    serviceEl.textContent  = '£0.00';
+    totalEl.textContent    = '£0.00';
+    if (payBtn) { payBtn.disabled = true; payBtn.setAttribute('aria-label', 'Cart is empty'); }
+    renderUpsell();
+    return;
+  }
+
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (payBtn) payBtn.disabled = false;
+
+  // Re-render cart items (remove old real items first)
+  Array.from(listEl.children).forEach(function(li) {
+    if (li.id !== 'cart-empty') li.remove();
+  });
+  cart.forEach(function(c) {
+    const li = document.createElement('li');
+    li.className = 'cart-item';
+    li.innerHTML =
+      '<div class="cart-item-emoji" aria-hidden="true"><img src="' + c.img + '" alt="' + c.name + '"></div>' +
+      '<div class="cart-item-info">' +
+        '<div class="cart-item-name">' + c.name + '</div>' +
+        '<div class="cart-item-sub">x' + c.qty + '</div>' +
+      '</div>' +
+      '<div class="cart-item-price">£' + (c.price * c.qty).toFixed(2) + '</div>';
+    listEl.insertBefore(li, emptyEl);
+  });
+
+  const subtotal = cart.reduce(function(s, c) { return s + c.price * c.qty; }, 0);
+  const service  = Math.round(subtotal * SERVICE_RATE * 100) / 100;
+  const total    = subtotal + service;
+
+  subtotalEl.textContent = '£' + subtotal.toFixed(2);
+  serviceEl.textContent  = '£' + service.toFixed(2);
+  totalEl.textContent    = '£' + total.toFixed(2);
+
+  if (payBtn) payBtn.setAttribute('aria-label', 'Proceed to payment — total £' + total.toFixed(2));
+
+  // Sync payment screen totals
+  const s4Amount = document.getElementById('s4-total-amount');
+  const s4Btn    = document.getElementById('s4-pay-btn');
+  if (s4Amount) { s4Amount.textContent = '£' + total.toFixed(2); s4Amount.setAttribute('aria-label', '£' + total.toFixed(2)); }
+  if (s4Btn)    { s4Btn.textContent = 'Pay £' + total.toFixed(2) + ' →'; s4Btn.setAttribute('aria-label', 'Pay £' + total.toFixed(2) + ' securely now'); }
+
+  renderUpsell();
+}
+
+function renderUpsell() {
+  const card = document.getElementById('upsell-card');
+  if (!card) return;
+  const btn = card.querySelector('.upsell-add');
+  if (!btn) return;
+  const inCart = cart.find(function(c) { return c.id === 'peshwari-naan'; });
+  if (inCart) {
+    btn.textContent = '✓ Added';
+    btn.style.background = '#10B981';
+    btn.disabled = true;
+    btn.setAttribute('aria-pressed', 'true');
+  } else {
+    btn.textContent = 'Add';
+    btn.style.background = '';
+    btn.disabled = false;
+    btn.setAttribute('aria-pressed', 'false');
+  }
+}
+
+function renderCartBar() {
+  const bar = document.querySelector('.cart-bar');
+  if (!bar) return;
+  const totalQty = cart.reduce(function(s, c) { return s + c.qty; }, 0);
+  const subtotal = cart.reduce(function(s, c) { return s + c.price * c.qty; }, 0);
+  const total    = subtotal * (1 + SERVICE_RATE);
+  bar.querySelector('.cart-count').textContent = totalQty;
+  bar.querySelector('.cart-bar-price').textContent = '£' + total.toFixed(2);
+  bar.setAttribute('aria-label', 'View cart — ' + totalQty + ' item' + (totalQty !== 1 ? 's' : '') + ', total £' + total.toFixed(2));
+  bar.style.display = totalQty > 0 ? '' : 'none';
+}
+
+/* ── ITEM DETAIL ── */
+function openDetail(id) {
+  const item = MENU.find(function(m) { return m.id === id; });
+  if (!item) return;
+  currentDetailId = id;
+  qty = 1;
+
+  document.getElementById('s2-detail-img').src = item.imgDetail;
+  document.getElementById('s2-detail-img').alt = item.name;
+  document.getElementById('s2-badge').textContent = item.badge;
+  document.getElementById('s2-name').textContent = item.name;
+  document.getElementById('s2-price').textContent = '£' + item.price.toFixed(2);
+  document.getElementById('s2-stars').textContent = '⭐ ' + item.rating + ' · ' + item.reviews + ' ratings';
+  document.getElementById('s2-desc').textContent = item.descLong;
+  document.getElementById('s2-allergens').innerHTML =
+    '<strong style="color:#fff;font-size:12px;">⚠️ Allergens:</strong> ' + item.allergens;
+
+  document.getElementById('s2-tags').innerHTML = item.tagLabels.map(function(t) {
+    var cls = t.includes('🌶') ? 'spice' : t.includes('🌿') ? 'veg' : 'chef';
+    return '<span class="tag ' + cls + '">' + t + '</span>';
+  }).join('');
+
+  const spiceWrap = document.getElementById('s2-spice-wrap');
+  const spiceLabel = document.getElementById('spice-group-label');
+  if (item.spiceDefault < 0) {
+    if (spiceWrap)  spiceWrap.style.display  = 'none';
+    if (spiceLabel) spiceLabel.style.display = 'none';
+  } else {
+    if (spiceWrap)  spiceWrap.style.display  = '';
+    if (spiceLabel) spiceLabel.style.display = '';
+    document.querySelectorAll('.spice-btn').forEach(function(b, i) {
+      b.classList.toggle('active', i === item.spiceDefault);
+      b.setAttribute('aria-checked', i === item.spiceDefault ? 'true' : 'false');
+    });
+  }
+
+  document.getElementById('qty-display').textContent = 1;
+  var addBtn = document.getElementById('s2-add-btn');
+  addBtn.textContent = 'Add to Cart · £' + item.price.toFixed(2);
+  addBtn.setAttribute('aria-label', 'Add 1 ' + item.name + ' to cart for £' + item.price.toFixed(2));
+
+  showScreen(2);
+}
+
+function addDetailToCart() {
+  if (!currentDetailId) return;
+  addToCart(currentDetailId, qty);
+  showScreen(3);
+}
+
+/* ── QUANTITY (detail screen) ── */
+function changeQty(delta) {
+  qty = Math.max(1, qty + delta);
+  var el = document.getElementById('qty-display');
+  el.textContent = qty;
+  el.setAttribute('aria-label', 'Quantity: ' + qty);
+  if (currentDetailId) {
+    var item = MENU.find(function(m) { return m.id === currentDetailId; });
+    if (item) {
+      var lineTotal = (item.price * qty).toFixed(2);
+      var btn = document.getElementById('s2-add-btn');
+      if (btn) {
+        btn.textContent = 'Add to Cart · £' + lineTotal;
+        btn.setAttribute('aria-label', 'Add ' + qty + ' ' + item.name + ' to cart for £' + lineTotal);
+      }
+    }
+  }
+}
+
+/* ── CONFIRMATION ── */
+function renderConfirmation() {
+  var rowsEl   = document.getElementById('s5-order-rows');
+  var totalEl  = document.getElementById('s5-total-paid');
+  if (!rowsEl) return;
+  if (cart.length === 0) { rowsEl.innerHTML = ''; if (totalEl) totalEl.textContent = '£0.00'; return; }
+  rowsEl.innerHTML = cart.map(function(c) {
+    return '<div class="s5-order-row">' +
+      '<div class="s5-order-item">' +
+        '<span class="s5-order-emoji" aria-hidden="true"><img src="' + c.img + '" alt=""></span>' +
+        '<span class="s5-order-name">' + c.name + (c.qty > 1 ? ' ×' + c.qty : '') + '</span>' +
+      '</div>' +
+      '<div class="s5-order-price">£' + (c.price * c.qty).toFixed(2) + '</div>' +
+    '</div>';
+  }).join('');
+  var subtotal = cart.reduce(function(s, c) { return s + c.price * c.qty; }, 0);
+  var total    = subtotal * (1 + SERVICE_RATE);
+  if (totalEl) totalEl.textContent = '£' + total.toFixed(2);
+}
+
+/* ── PAYMENT METHOD ── */
 function setMethod(el) {
-  document.querySelectorAll('.method-card').forEach(c => {
+  document.querySelectorAll('.method-card').forEach(function(c) {
     c.classList.remove('active');
     c.setAttribute('aria-checked', 'false');
   });
@@ -1079,8 +1332,9 @@ function setMethod(el) {
   el.setAttribute('aria-checked', 'true');
 }
 
+/* ── SPICE SELECTOR ── */
 function selectSpice(el) {
-  document.querySelectorAll('.spice-btn').forEach(b => {
+  document.querySelectorAll('.spice-btn').forEach(function(b) {
     b.classList.remove('active');
     b.setAttribute('aria-checked', 'false');
   });
@@ -1088,81 +1342,74 @@ function selectSpice(el) {
   el.setAttribute('aria-checked', 'true');
 }
 
+/* ── FILTERS ── */
 function toggleFilter(el) {
-  document.querySelectorAll('.s1-filter').forEach(f => f.classList.remove('on'));
+  document.querySelectorAll('.s1-filter').forEach(function(f) { f.classList.remove('on'); });
   el.classList.add('on');
-
-  const label = el.textContent.trim();
-  const list  = document.getElementById('menu-list');
-  const cards = Array.from(list.querySelectorAll('.item-card'));
-
-  // Reset visibility
-  cards.forEach(c => { c.classList.remove('hidden'); c.style.order = ''; });
-
+  var label = el.textContent.trim();
+  var list  = document.getElementById('menu-list');
+  var cards = Array.from(list.querySelectorAll('.item-card'));
+  cards.forEach(function(c) { c.classList.remove('hidden'); c.style.order = ''; });
   if (label.includes('Chef')) {
-    cards.forEach(c => { if (!c.dataset.tags.includes('chef')) c.classList.add('hidden'); });
+    cards.forEach(function(c) { if (!c.dataset.tags.includes('chef')) c.classList.add('hidden'); });
   } else if (label.includes('Veg')) {
-    cards.forEach(c => { if (!c.dataset.tags.includes('veg'))  c.classList.add('hidden'); });
+    cards.forEach(function(c) { if (!c.dataset.tags.includes('veg'))  c.classList.add('hidden'); });
   } else if (label.includes('Trending')) {
-    cards.forEach(c => { if (!c.dataset.tags.includes('trending')) c.classList.add('hidden'); });
+    cards.forEach(function(c) { if (!c.dataset.tags.includes('trending')) c.classList.add('hidden'); });
   } else if (label.includes('Low')) {
-    cards.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price))
-         .forEach((c, i) => { c.style.order = i; });
-    list.style.display = 'flex'; // re-trigger flex order
+    cards.sort(function(a, b) { return parseFloat(a.dataset.price) - parseFloat(b.dataset.price); })
+         .forEach(function(c, i) { c.style.order = i; });
   }
 }
 
-let qty = 1;
-function changeQty(delta) {
-  qty = Math.max(1, qty + delta);
-  const el = document.getElementById('qty-display');
-  el.textContent = qty;
-  el.setAttribute('aria-label', 'Quantity: ' + qty);
-}
-
+/* ── FAVOURITES ── */
 function toggleFav(btn) {
-  const isPressed = btn.getAttribute('aria-pressed') === 'true';
+  var isPressed = btn.getAttribute('aria-pressed') === 'true';
   btn.setAttribute('aria-pressed', String(!isPressed));
   btn.textContent = isPressed ? '🤍' : '❤️';
   btn.setAttribute('aria-label', isPressed ? 'Save to favourites' : 'Saved to favourites');
 }
 
+/* ── STAR RATING ── */
 function rateStar(n) {
-  document.querySelectorAll('.star').forEach((s, i) => {
+  document.querySelectorAll('.star').forEach(function(s, i) {
     s.textContent = i < n ? '⭐' : '☆';
     s.style.transform = i < n ? 'scale(1.1)' : 'scale(1)';
     s.setAttribute('aria-label', (i + 1) + ' star' + (i > 0 ? 's' : '') + (i < n ? ' — selected' : ''));
   });
-  setTimeout(() => {
-    const el = document.querySelector('.s5-rating');
+  setTimeout(function() {
+    var el = document.querySelector('.s5-rating');
     if (el) el.innerHTML = '<div class="s5-rating-title">Thanks! 🙏</div><p class="s5-rating-sub" style="color:#34D399">Your review helps the kitchen improve.</p>';
   }, 600);
 }
 
 /* ── THEME TOGGLE ── */
-const themeBtn = document.getElementById('theme-btn');
-const root = document.documentElement;
+var themeBtn = document.getElementById('theme-btn');
+var root = document.documentElement;
 
 function applyTheme(theme) {
   root.setAttribute('data-theme', theme);
-  const isLight = theme === 'light';
+  var isLight = theme === 'light';
   themeBtn.textContent = isLight ? '🌙' : '☀️';
   themeBtn.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
   themeBtn.setAttribute('aria-pressed', String(isLight));
   try { localStorage.setItem('tt-theme', theme); } catch(e) {}
 }
 
-// Load saved preference or respect OS setting
-const saved = (() => { try { return localStorage.getItem('tt-theme'); } catch(e) { return null; } })();
+var saved = (function() { try { return localStorage.getItem('tt-theme'); } catch(e) { return null; } })();
 if (saved) {
   applyTheme(saved);
 } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
   applyTheme('light');
 }
 
-themeBtn.addEventListener('click', () => {
+themeBtn.addEventListener('click', function() {
   applyTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
 });
+
+/* ── INIT ── */
+renderCartBar();
+renderCart();
 </script>
 </body>
 </html>
