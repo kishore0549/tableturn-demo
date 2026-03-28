@@ -1162,22 +1162,27 @@ function showScreen(n) {
 }
 
 /* ── CART ENGINE ── */
-function addToCart(id, quantity) {
+function addToCart(id, quantity, spice) {
   quantity = quantity || 1;
   const item = MENU.find(function(m) { return m.id === id; });
   if (!item) return;
+  // Default spice from MENU data if not provided
+  if (!spice && item.spiceDefault >= 0) spice = SPICE_LABELS[item.spiceDefault];
   const existing = cart.find(function(c) { return c.id === id; });
   if (existing) {
     existing.qty += quantity;
+    if (spice) existing.spice = spice;
   } else {
-    cart.push({ id: item.id, name: item.name, price: item.price, img: item.img, qty: quantity });
+    cart.push({ id: item.id, name: item.name, price: item.price, img: item.img, qty: quantity, spice: spice || '' });
   }
   renderCart();
   renderCartBar();
 }
 
 function quickAdd(id, btn) {
-  addToCart(id, 1);
+  var item = MENU.find(function(m) { return m.id === id; });
+  var spice = (item && item.spiceDefault >= 0) ? SPICE_LABELS[item.spiceDefault] : '';
+  addToCart(id, 1, spice);
   // Visual feedback on + button
   const orig = btn.textContent;
   btn.textContent = '✓';
@@ -1224,7 +1229,7 @@ function renderCart() {
       '<div class="cart-item-emoji" aria-hidden="true"><img src="' + c.img + '" alt="' + c.name + '"></div>' +
       '<div class="cart-item-info">' +
         '<div class="cart-item-name">' + c.name + '</div>' +
-        '<div class="cart-item-sub">x' + c.qty + '</div>' +
+        '<div class="cart-item-sub">' + (c.spice ? c.spice + ' · ' : '') + 'x' + c.qty + '</div>' +
       '</div>' +
       '<div class="cart-item-price">£' + (c.price * c.qty).toFixed(2) + '</div>';
     listEl.insertBefore(li, emptyEl);
@@ -1343,7 +1348,11 @@ function openDetail(id) {
 
 function addDetailToCart() {
   if (!currentDetailId) return;
-  addToCart(currentDetailId, qty);
+  var activeBtn = document.querySelector('.spice-btn.active');
+  var btns = Array.from(document.querySelectorAll('.spice-btn'));
+  var idx = activeBtn ? btns.indexOf(activeBtn) : -1;
+  var spice = idx >= 0 ? SPICE_LABELS[idx] : '';
+  addToCart(currentDetailId, qty, spice);
   showScreen(3);
 }
 
@@ -1376,7 +1385,7 @@ function renderConfirmation() {
     return '<div class="s5-order-row">' +
       '<div class="s5-order-item">' +
         '<span class="s5-order-emoji" aria-hidden="true"><img src="' + c.img + '" alt=""></span>' +
-        '<span class="s5-order-name">' + c.name + (c.qty > 1 ? ' ×' + c.qty : '') + '</span>' +
+        '<span class="s5-order-name">' + c.name + (c.qty > 1 ? ' ×' + c.qty : '') + (c.spice ? '<br><small style="font-size:10px;color:#94A3B8;">' + c.spice + '</small>' : '') + '</span>' +
       '</div>' +
       '<div class="s5-order-price">£' + (c.price * c.qty).toFixed(2) + '</div>' +
     '</div>';
@@ -1397,13 +1406,24 @@ function setMethod(el) {
 }
 
 /* ── SPICE SELECTOR ── */
+const SPICE_LABELS = ['🌶 Mild', '🌶🌶 Medium', '🌶🌶🌶 Hot', '🌶🌶🌶🌶 Extra Hot'];
+
 function selectSpice(el) {
-  document.querySelectorAll('.spice-btn').forEach(function(b) {
+  var btns = Array.from(document.querySelectorAll('.spice-btn'));
+  btns.forEach(function(b) {
     b.classList.remove('active');
     b.setAttribute('aria-checked', 'false');
   });
   el.classList.add('active');
   el.setAttribute('aria-checked', 'true');
+
+  // Update the spice tag in the item detail header
+  var idx = btns.indexOf(el);
+  var label = SPICE_LABELS[idx] || '';
+  var spiceTag = document.querySelector('#s2-tags .tag.spice');
+  if (spiceTag) {
+    spiceTag.textContent = label + ' Heat';
+  }
 }
 
 /* ── FILTERS ── */
