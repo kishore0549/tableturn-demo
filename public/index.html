@@ -845,7 +845,7 @@ body {
             </div>
             <p class="s2-desc" id="s2-desc">Our signature slow-cooked lamb in a rich, aromatic Kashmiri sauce. Simmered for 6 hours with whole spices, dried chillies and a touch of yoghurt. Best paired with our Peshwari Naan.</p>
             <div class="s2-tags" id="s2-tags">
-              <span class="tag spice">🌶🌶 Medium Heat</span>
+              <span class="tag spice">🌶🌶 Medium</span>
               <span class="tag chef">Gluten Free</span>
             </div>
 
@@ -1055,7 +1055,7 @@ const MENU = [
     desc: 'Slow-cooked, aromatic spices, tender lamb',
     descLong: 'Our signature slow-cooked lamb in a rich, aromatic Kashmiri sauce. Simmered for 6 hours with whole spices, dried chillies and a touch of yoghurt. Best paired with our Peshwari Naan.',
     badge: '⭐ Chef\'s Special This Week',
-    tagLabels: ['🌶🌶 Medium Heat', 'Gluten Free'],
+    tagLabels: ['🌶🌶 Medium', 'Gluten Free'],
     rating: '4.9', reviews: '312',
     allergens: 'Contains dairy (yoghurt). Free from: nuts, gluten, eggs. Always inform your server of any allergies.',
     spiceDefault: 1
@@ -1111,7 +1111,7 @@ const MENU = [
     desc: 'Harissa-spiced patty, brioche bun, mint raita',
     descLong: 'A hand-pressed lamb patty marinated in harissa and cumin, served in a toasted brioche bun with caramelised onions, aged cheddar and house mint raita.',
     badge: '🔥 Trending This Week',
-    tagLabels: ['🌶🌶 Medium Heat'],
+    tagLabels: ['🌶🌶 Medium'],
     rating: '4.6', reviews: '87',
     allergens: 'Contains: gluten (bun), dairy (cheese, raita), sesame. Free from: tree nuts.',
     spiceDefault: 1
@@ -1422,7 +1422,7 @@ function selectSpice(el) {
   var label = SPICE_LABELS[idx] || '';
   var spiceTag = document.querySelector('#s2-tags .tag.spice');
   if (spiceTag) {
-    spiceTag.textContent = label + ' Heat';
+    spiceTag.textContent = label;
   }
 }
 
