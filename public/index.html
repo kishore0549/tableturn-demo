@@ -1476,6 +1476,12 @@ themeBtn.addEventListener('click', function() {
 /* ── INIT ── */
 renderCartBar();
 renderCart();
+
+// Scroll phone into view on load
+window.addEventListener('load', function() {
+  var phone = document.querySelector('.phone-wrap');
+  if (phone) phone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
 </script>
 </body>
 </html>
