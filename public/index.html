@@ -100,7 +100,7 @@ body {
 /* ── HERO ── */
 .hero {
   text-align: center;
-  padding: 72px 20px 40px;
+  padding: 16px 20px 10px;
   position: relative;
   overflow: hidden;
 }
@@ -118,31 +118,31 @@ body {
     radial-gradient(ellipse 60% 40% at 20% 80%, rgba(245,158,11,0.12) 0%, transparent 60%);
 }
 .hero-tag {
-  display:inline-flex; align-items:center; gap:8px;
+  display:inline-flex; align-items:center; gap:6px;
   background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.25);
-  border-radius:100px; padding:6px 16px;
-  font-size:12px; letter-spacing:0.08em; color: var(--lime);
-  text-transform:uppercase; margin-bottom:24px;
+  border-radius:100px; padding:4px 12px;
+  font-size:10px; letter-spacing:0.08em; color: var(--lime);
+  text-transform:uppercase; margin-bottom:8px;
   backdrop-filter: blur(12px);
 }
 .hero-tag span { width:6px; height:6px; border-radius:50%; background:var(--lime); animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
 .hero h1 {
   font-family:'Space Grotesk',sans-serif; font-weight:800;
-  font-size:clamp(32px,5vw,64px); line-height:1.05;
-  letter-spacing:-0.03em; margin-bottom:16px;
+  font-size:clamp(20px,3vw,34px); line-height:1.1;
+  letter-spacing:-0.03em; margin-bottom:6px;
   color: var(--text);
 }
 .hero h1 em { font-style:normal; color:var(--lime); }
-.hero p { color:var(--muted); font-size:16px; max-width:480px; margin:0 auto 40px; line-height:1.6; }
+.hero p { color:var(--muted); font-size:12px; max-width:480px; margin:0 auto 8px; line-height:1.4; }
 
 /* ── SCREEN TABS ── */
 .screen-tabs {
-  display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
-  padding:0 20px 40px;
+  display:flex; gap:6px; justify-content:center; flex-wrap:wrap;
+  padding:0 16px 8px;
 }
 .tab {
-  padding:9px 18px; border-radius:100px; font-size:13px; font-weight:500;
+  padding:5px 11px; border-radius:100px; font-size:11px; font-weight:500;
   cursor:pointer; transition:all 0.2s;
   border:1.5px solid var(--border);
   background:transparent; color:var(--muted);
@@ -153,36 +153,36 @@ body {
 
 /* ── FLOW SECTION ── */
 .flow-section {
-  max-width:900px; margin:0 auto 60px; padding:0 24px;
+  max-width:900px; margin:0 auto 8px; padding:0 16px;
   text-align:center;
 }
-.flow-steps { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; }
+.flow-steps { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:2px; }
 .flow-step {
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  width:120px;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  width:76px;
 }
 .flow-num {
-  width:44px; height:44px; border-radius:50%;
+  width:28px; height:28px; border-radius:50%;
   border:2px solid var(--lime);
   display:flex; align-items:center; justify-content:center;
-  font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:800; color:var(--lime);
+  font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:800; color:var(--lime);
   transition: background 0.25s, color 0.25s;
 }
 .flow-step.active .flow-num { background:var(--lime); color:var(--navy); }
 .flow-step.active .flow-step-label { color:var(--text); font-weight:600; }
-.flow-step-label { font-size:11px; color:var(--muted); text-align:center; line-height:1.4; transition:color 0.25s; }
-.flow-arrow { color:var(--border); font-size:20px; margin-bottom:22px; }
+.flow-step-label { font-size:9px; color:var(--muted); text-align:center; line-height:1.3; transition:color 0.25s; }
+.flow-arrow { color:var(--border); font-size:14px; margin-bottom:10px; }
 
 /* ── PHONE FRAME ── */
 .demo-stage {
   display:flex; justify-content:center; align-items:flex-start;
-  gap:40px; padding:0 20px 80px; flex-wrap:wrap;
+  gap:24px; padding:0 20px 20px; flex-wrap:wrap;
 }
 .phone-wrap { position:relative; flex-shrink:0; }
 .phone-label {
-  text-align:center; margin-bottom:16px;
-  font-size:11px; letter-spacing:0.10em; text-transform:uppercase;
-  color:var(--muted); min-height:16px;
+  text-align:center; margin-bottom:6px;
+  font-size:10px; letter-spacing:0.10em; text-transform:uppercase;
+  color:var(--muted); min-height:14px;
 }
 .phone {
   width:320px; height:640px;
